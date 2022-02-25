@@ -1,0 +1,49 @@
+﻿@model IEnumerable<GB.ASPNET.WebStore.Models.Employee>
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees list</title>
+    @*<link rel="stylesheet" href="style.css">*@
+</head>
+
+<body>
+    <h3>Список сотрудников</h3>
+
+    <table>
+        <thead>
+            <tr>
+                @*<td>id</td>*@
+                <td>Фамилия</td>
+                <td>Имя</td>
+                <td>Отчество</td>
+                <td>Возраст</td>
+                <td>Ф.И.О.</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var emp in Model)
+            {
+                <tr>
+                    @*<td>@emp.Id.ToString()</td>*@
+                    <td>@emp.NameLast</td>
+                    <td>@emp.NameFirst</td>
+                    <td>@emp.NamePaternal</td>
+                    <td>@emp.Age.ToString() @GB.ASPNET.WebStore.Models.General.AgeUnit(emp.Age)</td>
+                    <td>@emp.NameShort</td>
+                    <td><a href="~/home/employeedetails/@emp.Id.ToString()">подробно</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p><a href="~/">На главную</a></p>
+</body>
+
+</html>
