@@ -1,6 +1,18 @@
 var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+_ = builder.Services.AddControllersWithViews();
 
-app.MapGet("/", () => "Hello World!");
+// регистрация сервисов
+
+var app = builder.Build();
+_ = app.UseRouting();
+
+_ = app.MapGet("/greetings", () => app.Configuration["ServerGreetings"]);
+//_ = app.MapPost("/home/employeeupdate/{id:number}", (id) => )
+
+_ = app.MapDefaultControllerRoute();
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}"
+//    );
 
 app.Run();

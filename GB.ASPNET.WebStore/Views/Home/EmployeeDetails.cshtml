@@ -1,0 +1,53 @@
+﻿@model GB.ASPNET.WebStore.Models.Employee
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees list</title>
+    @*<link rel="stylesheet" href="style.css">*@
+</head>
+
+<body>
+    <h3>Запись о сотруднике @Model.NameShort</h3>
+
+    <form method="post" action="~/home/employeeupdate/@Model.Id">
+        <table>
+            <tbody>
+                <tr>
+                    <td>Фамилия</td>
+                    <td>@Model.NameLast</td>
+                    <td><input type="text" placeholder="изменить" id="setNameLast" name="setNameLast" /></td>
+                </tr>
+                <tr>
+                    <td>Имя</td>
+                    <td>@Model.NameFirst</td>
+                    <td><input type="text" placeholder="изменить" id="setNameFirst" name="setNameFirst" /></td>
+                </tr>
+                <tr>
+                    <td>Отчество</td>
+                    <td>@Model.NamePaternal</td>
+                    <td><input type="text" placeholder="изменить" id="setNamePaternal" name="setNamePaternal" /></td>
+                </tr>
+                <tr>
+                    <td>Возраст</td>
+                    <td>@Model.Age.ToString() @GB.ASPNET.WebStore.Models.General.AgeUnit(Model.Age)</td>
+                    <td><input type="number" placeholder="изменить" min="1" max="200" id="setAge" name="setAge" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            @*<input type="hidden" value="@Model.Id" name="updateId" />*@
+            <input type="submit" value="принять изменения" name="update_employee" />
+        </p>
+    </form>
+    
+    <p><a href="~/home/employees">Список сотрудников</a></p>
+    <p><a href="~/">На главную</a></p>
+</body>
+
+</html>
