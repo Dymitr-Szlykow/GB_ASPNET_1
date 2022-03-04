@@ -3,14 +3,7 @@ Thumbs.db
 
 .vs/
 bin/
+libman/
 obj/
 Obj/
 Debug/
-
-
-#	# Commands to upload new local repository
-#	git remote add origin {https://github.com/Dymitr-Szlykow/...}
-#	git push --all -u origin
-#	
-#	git merge <branch> --no-commit --no-ff
-#	git merge <commit-hash> --no-commit --no-ff

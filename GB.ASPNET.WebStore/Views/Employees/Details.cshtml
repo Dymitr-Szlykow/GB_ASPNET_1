@@ -1,22 +1,12 @@
 ﻿@model GB.ASPNET.WebStore.Models.Employee
 @{
+    ViewData["Title"] = "Employee detailed";
 }
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employees list</title>
-    @*<link rel="stylesheet" href="style.css">*@
-</head>
-
-<body>
+<div class="container">
     <h3>Запись о сотруднике @Model.NameShort</h3>
 
-    <form method="post" action="~/home/employeeupdate/@Model.Id">
-        <table>
+    <form method="post" asp-controller="Employees" asp-action="Update" asp-route-id="@Model.Id">
+        <table class="table">
             <tbody>
                 <tr>
                     <td>Фамилия</td>
@@ -42,12 +32,11 @@
         </table>
         <p>
             @*<input type="hidden" value="@Model.Id" name="updateId" />*@
+            @*@Html.ActionLink(linkText: "Edit", actionName: "Update", controllerName: "Employees", routeValues: new Employee { Id = 1, NameLast = "Иванов", NameFirst = "Иван", NamePaternal = "Иванович", Age = 23 });*@
             <input type="submit" value="принять изменения" name="update_employee" />
         </p>
     </form>
     
-    <p><a href="~/home/employees">Список сотрудников</a></p>
-    <p><a href="~/">На главную</a></p>
-</body>
-
-</html>
+    <p><a asp-controller="Employee" asp-action="List">Список сотрудников</a></p>
+    <p><a asp-controller="Home" asp-action="Index">На главную</a></p>
+</div>

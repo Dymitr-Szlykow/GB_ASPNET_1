@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@1.10.2",
+      "destination": "wwwroot/libman/jquery/"
+    },
+    {
+      "library": "twitter-bootstrap@3.0.3",
+      "destination": "wwwroot/libman/bootstrap"
+    },
+    {
+      "library": "font-awesome@4.0.3",
+      "destination": "wwwroot/libman/fa"
+    },
+    {
+      "library": "prettyPhoto@3.1.6",
+      "destination": "wwwroot/libman/prettyPhoto"
+    },
+    {
+      "library": "bootstrap-slider@4.1.4",
+      "destination": "wwwroot/libman/bootstrap"
+    },
+    {
+      "library": "scrollup@2.3.2",
+      "destination": "wwwroot/libman/scrollup"
+    }
+  ]
+}

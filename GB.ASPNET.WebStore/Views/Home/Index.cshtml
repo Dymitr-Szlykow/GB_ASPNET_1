@@ -1,24 +1,22 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+	ViewData["Title"] = "Главная";
 }
-<!DOCTYPE html>
-<html lang="en">
+<partial name="Partial/_Slider" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacts</title>
-    @*<link rel="stylesheet" href="style.css">*@
-</head>
-
-<body>
-    <h3>Heading</h3>
-    <p>Привет от первого представления!</p>
-
-    <p><a href="~/home/employees">Список сотрудников</a></p>
-</body>
-
-</html>
+<section>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3">
+				<partial name="Partial/_Left-sidebar" />
+			</div>
+				
+			<div class="col-sm-9 padding-right">
+				<partial name="Partial/_features_items" />
+					
+				<partial name="Partial/_category-tab" />
+					
+				<partial name="Partial/_recommended_items" />
+			</div>
+		</div>
+	</div>
+</section>
