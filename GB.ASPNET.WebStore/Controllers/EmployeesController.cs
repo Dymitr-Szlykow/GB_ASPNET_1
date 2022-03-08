@@ -3,6 +3,7 @@ using GB.ASPNET.WebStore.Models;
 
 namespace GB.ASPNET.WebStore.Controllers
 {
+    [Route("staff/{action=Index}/{id?}")]
     public class EmployeesController : Controller
     {
         private static readonly List<Employee> __employees = new List<Employee>()
@@ -15,9 +16,11 @@ namespace GB.ASPNET.WebStore.Controllers
         public IActionResult Index() => View("List", __employees);
         public IActionResult List() => View(__employees);
 
+        [Route("~/employeeinfo({id:int})")]
         public IActionResult Details(int id)
         {
             return View(__employees.Find((element) => element.Id == id));
+
             Employee emp = __employees.FirstOrDefault(e => e.Id == id);
             if (emp == null) return NotFound();
             else return View(emp);
