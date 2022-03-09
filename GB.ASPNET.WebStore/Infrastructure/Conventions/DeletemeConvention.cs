@@ -5,6 +5,9 @@ public class DeletemeConvention : IControllerModelConvention
 {
     public void Apply(ControllerModel controller)
     {
-        throw new NotImplementedException();
+        if (controller.ControllerName == "Home")
+        {
+            //controller.Actions.Add(new ActionModel(...));
+        }
     }
 }

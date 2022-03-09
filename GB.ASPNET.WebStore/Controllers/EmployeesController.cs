@@ -1,46 +1,117 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GB.ASPNET.WebStore.Models;
+using GB.ASPNET.WebStore.ViewModels;
+using GB.ASPNET.WebStore.Services;
+using GB.ASPNET.WebStore.Services.Interfaces;
 
-namespace GB.ASPNET.WebStore.Controllers
+namespace GB.ASPNET.WebStore.Controllers;
+
+[Route("staff/{action=Index}/{id?}")]
+public class EmployeesController : Controller
 {
-    [Route("staff/{action=Index}/{id?}")]
-    public class EmployeesController : Controller
+    private readonly IEmployeesData _employeesData;
+    private readonly ILogger<EmployeesController> _logger;
+
+    public EmployeesController(IEmployeesData employeesData, ILogger<EmployeesController> logger)
     {
-        private static readonly List<Employee> __employees = new List<Employee>()
+        _employeesData = employeesData;
+        _logger = logger;
+    }
+
+    public IActionResult Index()
+    {
+        IEnumerable<Employee> model = _employeesData.GetAll();
+        return View("List", model);
+    }
+
+    public IActionResult List()
+    {
+        return View(_employeesData.GetAll());
+    }
+
+    [Route("~/EmployeeInfo({id:int})")]
+    public IActionResult Details(int id)
+    {
+        Employee? model = _employeesData.GetById(id);
+        if (model == null) return NotFound();
+        else return View(model);
+    }
+
+    public IActionResult Create()
+    {
+        return View("Update", new EmployeeVM());
+    }
+
+    public IActionResult Update(int? sentId)
+    {
+        if (sentId is not { } id) return View(new EmployeeVM());
+
+        Employee? emp = _employeesData.GetById(id);
+        if (emp is null) return NotFound();
+        else
         {
-            new Employee { Id = 1, NameLast = "Иванов", NameFirst = "Иван", NamePaternal = "Иванович", Age = 23 },
-            new Employee { Id = 2, NameLast = "Петров", NameFirst = "Петр", NamePaternal = "Петрович", Age = 27 },
-            new Employee { Id = 3, NameLast = "Сидоров", NameFirst = "Сидор", NamePaternal = "Сидорович", Age = 18 }
-        };
-
-        public IActionResult Index() => View("List", __employees);
-        public IActionResult List() => View(__employees);
-
-        [Route("~/employeeinfo({id:int})")]
-        public IActionResult Details(int id)
-        {
-            return View(__employees.Find((element) => element.Id == id));
-
-            Employee emp = __employees.FirstOrDefault(e => e.Id == id);
-            if (emp == null) return NotFound();
-            else return View(emp);
-        }
-
-        public IActionResult Update(int? id, string? setNameFirst, string? setNameLast, string? setNamePaternal, int? setAge)
-        {
-            if (id != null)
+            var model = new EmployeeVM
             {
-                var emp = __employees.Find((element) => element.Id == id);
-                if (emp != null)
-                {
-                    if (setNameFirst != null) emp.NameFirst = setNameFirst;
-                    if (setNameLast != null) emp.NameLast = setNameLast;
-                    if (setNamePaternal != null) emp.NamePaternal = setNamePaternal;
-                    if (setAge != null) emp.Age = (int)setAge;
-                }
-            }
-            return View("List", __employees);
+                Id = emp.Id,
+                NameFirst = emp.NameFirst,
+                NameLast = emp.NameLast,
+                NamePaternal = emp.NamePaternal,
+                NameShort = emp.NameShort,
+                Age = emp.Age
+            };
+            return View(model);
         }
-        public IActionResult Employees() => View(__employees);
+    }
+
+    [HttpPost]
+    public IActionResult Update(EmployeeVM viewmodel)
+    {
+        var employee = new Employee
+        {
+            Id = viewmodel.Id,
+            NameFirst = viewmodel.NameFirst,
+            NameLast = viewmodel.NameLast,
+            NamePaternal = viewmodel.NamePaternal,
+            Age = viewmodel.Age
+        };
+        if (employee.Id == 0)
+        {
+            var newId = _employeesData.Add(employee);
+            return RedirectToAction(nameof(List), _employeesData);
+            // return RedirectToRoute($"~/EmployeeInfo({newId})");
+        }
+        else
+        {
+            _employeesData.Edit(employee);
+            return RedirectToAction(nameof(List), _employeesData);
+                //View("List", _employeesData.GetAll());
+        }
+    }
+
+    public IActionResult Delete(int id)
+    {
+        if (id < 0) return BadRequest();
+        Employee? emp = _employeesData.GetById((int)id);
+        if (emp is null) return NotFound();
+        else
+        {
+            var model = new EmployeeVM
+            {
+                Id = emp.Id,
+                NameFirst = emp.NameFirst,
+                NameLast = emp.NameLast,
+                NamePaternal = emp.NamePaternal,
+                NameShort = emp.NameShort,
+                Age = emp.Age
+            };
+            return View(model);
+        }
+    }
+
+    [HttpPost]
+    public IActionResult DeleteConfirm(int id)
+    {
+        if(!_employeesData.Delete(id)) return NotFound();
+        else return RedirectToAction(nameof(List));
     }
 }
