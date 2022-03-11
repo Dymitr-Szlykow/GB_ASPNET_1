@@ -35,14 +35,5 @@ namespace GB.ASPNET.WebStore.Models
                 age = value;
             }
         }
-
-        //public Employee(string nameFirst, string nameLast, string namePaternal)
-        //{
-        //    NameFirst = nameFirst;
-        //    NameLast = nameLast;
-        //    NamePaternal = namePaternal;
-        //}
-        //public Employee(string nameFirst, string nameLast, string namePaternal, int age)
-        //    => new Employee(nameFirst, nameLast, namePaternal) { Age = age };
     }
 }

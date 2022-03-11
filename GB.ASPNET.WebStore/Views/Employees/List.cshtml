@@ -5,32 +5,51 @@
 <div class="container">
     <h3>Список сотрудников</h3>
 
-    <table class="table">
-        <thead>
-            <tr>
-                @*<td>id</td>*@
-                <td>Фамилия</td>
-                <td>Имя</td>
-                <td>Отчество</td>
-                <td>Возраст</td>
-                <td>Ф.И.О.</td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var emp in Model)
-            {
+    @if (Model.Any())
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    @*<td>@emp.Id.ToString()</td>*@
-                    <td>@emp.NameLast</td>
-                    <td>@emp.NameFirst</td>
-                    <td>@emp.NamePaternal</td>
-                    <td>@emp.Age.ToString() @GB.ASPNET.WebStore.Models.General.AgeUnit(emp.Age)</td>
-                    <td>@emp.NameShort</td>
-                    <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@emp.Id">подробно</a></td>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Возраст</th>
+                    <th>Ф.И.О.</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var emp in Model)
+                {
+                    <tr>
+                        <td>@emp.NameLast</td>
+                        <td>@emp.NameFirst</td>
+                        <td>@emp.NamePaternal</td>
+                        <td>@emp.Age.ToString() @GB.ASPNET.WebStore.Models.General.AgeUnit(emp.Age)</td>
+                        <td>@emp.NameShort</td>
+                        <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@emp.Id">подробно</a></td>
+                        <td>
+                            <a asp-controller="Employees" asp-action="Update" asp-route-id="@emp.Id">
+                                <span class="fa fa-edit"></span>
+                            </a> |
+                            <a asp-controller="Employees" asp-action="Delete" asp-route-id="@emp.Id" class="text-danger">
+                                <span class="fa fa-times" ></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Сотрудников нет.</p>
+    }
 
+    <p>
+        <a asp-controller="Employees" asp-action="Create">Новая запись</a>
+        или
+        <a asp-controller="Employees" asp-action="Update">Запись новая</a>
+    </p>
     <p><a asp-controller="Home" asp-action="Index">На главную</a></p>
 </div>

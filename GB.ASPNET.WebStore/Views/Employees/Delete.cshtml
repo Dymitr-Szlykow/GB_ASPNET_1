@@ -1,0 +1,48 @@
+﻿@model GB.ASPNET.WebStore.ViewModels.EmployeeVM
+@{
+    ViewData["Title"] = "Удаление записи о сотруднике";
+}
+<div class="container">
+    <h1>Удаление записи о сотруднике</h1>
+
+    <div>
+        <h4>@Model.NameShort</h4>
+        <hr />
+        <dl class="row">
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.NameFirst)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.NameFirst)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.NameLast)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.NameLast)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.NamePaternal)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.NamePaternal)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Age)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Age)
+            </dd>
+
+        </dl>
+    
+        <form asp-controller="Employees" asp-action="DeleteConfirm" asp-route-id="@Model.Id">
+            <input type="submit" value="Удалить" class="btn btn-danger" /> |
+            <a asp-controller="Employees" asp-action="List">К списку</a>
+        </form>
+    </div>
+</div>

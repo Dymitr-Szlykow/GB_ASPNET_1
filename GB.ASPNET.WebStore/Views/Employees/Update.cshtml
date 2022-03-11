@@ -1,0 +1,50 @@
+﻿@model GB.ASPNET.WebStore.ViewModels.EmployeeVM
+@{
+    ViewData["Title"] = $"Редактирование | {Model.NameShort}";
+}
+
+<div class="container">
+    <h1>Изменение записи о сотруднике</h1>
+
+    <h4>@Model.NameShort</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Update">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="NameFirst" class="control-label"></label>
+                    <input asp-for="NameFirst" class="form-control" />
+                    <span asp-validation-for="NameFirst" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="NameLast" class="control-label"></label>
+                    <input asp-for="NameLast" class="form-control" />
+                    <span asp-validation-for="NameLast" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="NamePaternal" class="control-label"></label>
+                    <input asp-for="NamePaternal" class="form-control" />
+                    <span asp-validation-for="NamePaternal" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Age" class="control-label"></label>
+                    <input asp-for="Age" class="form-control" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-controller="employees" asp-action="List">Back to List</a>
+    </div>
+</div>
