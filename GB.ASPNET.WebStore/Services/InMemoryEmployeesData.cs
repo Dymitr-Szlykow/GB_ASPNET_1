@@ -1,5 +1,5 @@
 ﻿using GB.ASPNET.WebStore.Data;
-using GB.ASPNET.WebStore.Models;
+using GB.ASPNET.WebStore.Domain.Entities;
 using GB.ASPNET.WebStore.Services.Interfaces;
 
 namespace GB.ASPNET.WebStore.Services;

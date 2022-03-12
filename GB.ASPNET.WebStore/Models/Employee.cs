@@ -1,15 +1,15 @@
 ﻿using System.Text;
 
-namespace GB.ASPNET.WebStore.Models
+namespace GB.ASPNET.WebStore.Deleteme
 {
     public class Employee
     {
         private int age;
 
         public int Id { get; set; }
-        public string NameFirst { get; set; }
-        public string NameLast { get; set; }
-        public string NamePaternal { get; set; }
+        public string NameFirst { get; set; } = null!;
+        public string NameLast { get; set; } = null!;
+        public string? NamePaternal { get; set; }
 
         public string NameShort
         {

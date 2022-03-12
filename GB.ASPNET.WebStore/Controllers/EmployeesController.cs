@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using GB.ASPNET.WebStore.Models;
+using GB.ASPNET.WebStore.Domain.Entities;
 using GB.ASPNET.WebStore.ViewModels;
 using GB.ASPNET.WebStore.Services;
 using GB.ASPNET.WebStore.Services.Interfaces;
 
 namespace GB.ASPNET.WebStore.Controllers;
 
-[Route("staff/{action=Index}/{id?}")]
+//[Controller]
+//[Route("staff/{action=Index}/{id?}")]
 public class EmployeesController : Controller
 {
     private readonly IEmployeesData _employeesData;
@@ -29,7 +30,7 @@ public class EmployeesController : Controller
         return View(_employeesData.GetAll());
     }
 
-    [Route("~/EmployeeInfo({id:int})")]
+    //[Route("~/EmployeeInfo({id:int})")]
     public IActionResult Details(int id)
     {
         Employee? model = _employeesData.GetById(id);
@@ -66,6 +67,10 @@ public class EmployeesController : Controller
     [HttpPost]
     public IActionResult Update(EmployeeVM viewmodel)
     {
+        if (viewmodel.NameLast == "Иванов" && viewmodel.Age < 21)
+            ModelState.AddModelError(key: string.Empty, errorMessage: "Никаких Ивановых младше 21 года. Ну ладно, Иванову можно.");
+        if (!ModelState.IsValid) return View(viewmodel);
+
         var employee = new Employee
         {
             Id = viewmodel.Id,
@@ -78,7 +83,9 @@ public class EmployeesController : Controller
         {
             var newId = _employeesData.Add(employee);
             return RedirectToAction(nameof(List), _employeesData);
-            // return RedirectToRoute($"~/EmployeeInfo({newId})");
+            //return RedirectToAction(nameof(Details), newId);
+            //return RedirectToRoute($"~/EmployeeInfo({newId})");
+            //return RedirectToRoute($"~/Employees/Details/{newId}");
         }
         else
         {

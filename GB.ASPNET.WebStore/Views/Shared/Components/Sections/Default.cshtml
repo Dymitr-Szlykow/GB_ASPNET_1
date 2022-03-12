@@ -1,0 +1,33 @@
+﻿@model IEnumerable<SectionViewModel>
+
+<h2>Категории</h2>
+<div class="panel-group category-products" id="accordian"><!--category-productsr-->
+		@foreach (var sectionVM in Model) {
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						@if (sectionVM.Children.Count == 0) {
+							<a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@sectionVM.Id">@sectionVM.Name</a>
+						}
+						else {
+							<a data-toggle="collapse" data-parent="#accordian" href="#@sectionVM.GetHashCode()">
+								<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+								@sectionVM.Name
+							</a>
+						}
+					</h4>
+				</div>
+				@if (sectionVM.Children.Count > 0) {
+					<div id="@sectionVM.GetHashCode()" class="panel-collapse collapse">
+						<div class="panel-body">
+							<ul>
+								@foreach (var childVM in sectionVM.Children) {
+									<li><a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@childVM.Id">@childVM.Name</a></li>
+								}
+							</ul>
+						</div>
+					</div>
+				}
+			</div>
+		}
+</div><!--/category-products-->

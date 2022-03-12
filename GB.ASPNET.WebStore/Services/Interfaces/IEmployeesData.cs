@@ -1,4 +1,5 @@
-﻿using GB.ASPNET.WebStore.Models;
+﻿using GB.ASPNET.WebStore.Domain.Entities;
+
 namespace GB.ASPNET.WebStore.Services.Interfaces;
 
 public interface IEmployeesData

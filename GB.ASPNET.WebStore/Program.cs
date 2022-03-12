@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ð å ã è ñ ò ð à ö è ÿ  ñ å ð â è ñ î â
 _ = builder.Services.AddScoped<IEmployeesData, InMemoryEmployeesData>();
+_ = builder.Services.AddScoped<IProductData, InMemoryProducData>();
 _ = builder.Services.AddControllersWithViews();
 //_ = builder.Services.AddControllersWithViews(opt =>
 //{
@@ -30,6 +31,6 @@ _ = app.MapDefaultControllerRoute();
 //app.MapControllerRoute(
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}"
-//    );
+//);
 
 app.Run();
