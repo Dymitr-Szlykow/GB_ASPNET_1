@@ -5,7 +5,7 @@ using GB.ASPNET.WebStore.Services.Interfaces;
 
 namespace GB.ASPNET.WebStore.Services;
 
-public class InMemoryProducData : IProductData
+public class InMemoryProductData : IProductData
 {
     public IEnumerable<Brand> GetBrands() => TestData.Brands;
 

@@ -5,7 +5,11 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GB.ASPNET.WebStore", "GB.ASPNET.WebStore\GB.ASPNET.WebStore.csproj", "{8AB22E93-D8B4-46F5-B01E-833FC2FFB1B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.Domain", "WebStore.Domain\WebStore.Domain.csproj", "{038F2937-E76B-434D-8F44-6FF398B7E31D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Domain", "WebStore.Domain\WebStore.Domain.csproj", "{038F2937-E76B-434D-8F44-6FF398B7E31D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.DAL", "WebStore.DAL\WebStore.DAL.csproj", "{6C0BEE62-DCA3-45BD-B1B1-FD9DCCCAA414}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{622EE496-4EF6-48FD-BCA7-03C388630EEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{038F2937-E76B-434D-8F44-6FF398B7E31D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{038F2937-E76B-434D-8F44-6FF398B7E31D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{038F2937-E76B-434D-8F44-6FF398B7E31D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C0BEE62-DCA3-45BD-B1B1-FD9DCCCAA414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C0BEE62-DCA3-45BD-B1B1-FD9DCCCAA414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C0BEE62-DCA3-45BD-B1B1-FD9DCCCAA414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C0BEE62-DCA3-45BD-B1B1-FD9DCCCAA414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{622EE496-4EF6-48FD-BCA7-03C388630EEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{622EE496-4EF6-48FD-BCA7-03C388630EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{622EE496-4EF6-48FD-BCA7-03C388630EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{622EE496-4EF6-48FD-BCA7-03C388630EEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

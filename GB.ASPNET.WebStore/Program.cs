@@ -1,6 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using GB.ASPNET.WebStore.Infrastructure.Conventions;
 using GB.ASPNET.WebStore.Infrastructure.Middleware;
-using GB.ASPNET.WebStore.Data;
+using GB.ASPNET.WebStore.DAL.Context;
 using GB.ASPNET.WebStore.Services;
 using GB.ASPNET.WebStore.Services.Interfaces;
 
@@ -11,6 +12,7 @@ WebApplication
     .SetMyServices()
     .Build()
 
+    .SetUpMyDB()
     .SetMyMiddlewarePipeline()
     .MapMyRoutes()
     .Run();
@@ -21,8 +23,13 @@ public static class WebStoreBuildHelper
     public static WebApplicationBuilder SetMyServices(this WebApplicationBuilder builder)
     {
         _ = builder.Services
+            .AddDbContext<WebStoreDB>(
+                opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
+            )
+            .AddTransient<IDbInitializer, DbInitializer>()
             .AddScoped<IEmployeesData, InMemoryEmployeesData>()
-            .AddScoped<IProductData, InMemoryProducData>();
+            //.AddScoped<IProductData, InMemoryProductData>();
+            .AddScoped<IProductData, SqlProductData>();
 
         _ = builder.Services.AddControllersWithViews();
         //_ = builder.Services.AddControllersWithViews(opt =>
@@ -32,6 +39,17 @@ public static class WebStoreBuildHelper
         //});
 
         return builder;
+    }
+
+    public static WebApplication SetUpMyDB(this WebApplication app)
+    {
+        using (IServiceScope? scope = app.Services.CreateScope())
+        {
+            scope.ServiceProvider
+                .GetRequiredService<IDbInitializer>()
+                .InitializeAsync(removeBefore: true).RunSynchronously();
+        }
+        return app;
     }
 
     public static WebApplication SetMyMiddlewarePipeline(this WebApplication app)

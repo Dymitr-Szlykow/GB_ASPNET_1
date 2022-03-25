@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  gb.aspnet.webstore:
+    image: ${DOCKER_REGISTRY-}gbaspnetwebstore
+    build:
+      context: .
+      dockerfile: GB.ASPNET.WebStore/Dockerfile
