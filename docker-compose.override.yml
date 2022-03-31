@@ -1,6 +1,12 @@
 version: '3.4'
 
 services:
+  db:
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=my1SuperSecretYoullNeverRememberItPassword
+      - MSSQL_PID=Express
+
   gb.aspnet.webstore:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

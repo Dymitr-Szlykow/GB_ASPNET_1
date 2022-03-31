@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using GB.ASPNET.WebStore.Infrastructure.Conventions;
 using GB.ASPNET.WebStore.Infrastructure.Middleware;
@@ -5,14 +6,13 @@ using GB.ASPNET.WebStore.DAL.Context;
 using GB.ASPNET.WebStore.Services;
 using GB.ASPNET.WebStore.Services.Interfaces;
 
-
 WebApplication
     .CreateBuilder(args)
 
     .SetMyServices()
     .Build()
 
-    .SetUpMyDB()
+    .SetUpMyDB().GetAwaiter().GetResult()
     .SetMyMiddlewarePipeline()
     .MapMyRoutes()
     .Run();
@@ -20,6 +20,7 @@ WebApplication
 
 public static class WebStoreBuildHelper
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplicationBuilder SetMyServices(this WebApplicationBuilder builder)
     {
         _ = builder.Services
@@ -41,17 +42,19 @@ public static class WebStoreBuildHelper
         return builder;
     }
 
-    public static WebApplication SetUpMyDB(this WebApplication app)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static async Task<WebApplication> SetUpMyDB(this WebApplication app)
     {
         using (IServiceScope? scope = app.Services.CreateScope())
         {
-            scope.ServiceProvider
+            await scope.ServiceProvider
                 .GetRequiredService<IDbInitializer>()
-                .InitializeAsync(removeBefore: true).RunSynchronously();
+                .InitializeAsync(removeBefore: true);
         }
         return app;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplication SetMyMiddlewarePipeline(this WebApplication app)
     {
         if (app.Environment.IsDevelopment())
@@ -67,15 +70,15 @@ public static class WebStoreBuildHelper
         return app;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplication MapMyRoutes(this WebApplication app)
     {
         _ = app.MapGet("/throw", handler: () => { throw new ApplicationException("Пример ошибки."); });
 
-        _ = app.MapDefaultControllerRoute();
-        //app.MapControllerRoute(
-        //    name: "default",
-        //    pattern: "{controller=Home}/{action=Index}/{id?}"
-        //);
+        //_ = app.MapDefaultControllerRoute();
+        _ = app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
 
         return app;
     }

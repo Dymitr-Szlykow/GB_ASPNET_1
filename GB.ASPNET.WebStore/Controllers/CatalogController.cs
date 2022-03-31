@@ -20,19 +20,22 @@ public class CatalogController : Controller
         };
         var products = _data.GetProducts();
 
-        return View(new CatalogViewModel()
-        {
-            BrandId = filter.BrandId,
-            SectionId = filter.SectionId,
-            Products = products
-                .OrderBy(el => el.Order)
-                .Select(el => new ProductViewModel()
-                {
-                    Id = el.Id,
-                    Name = el.Name,
-                    Price = el.Price,
-                    ImageUrl = el.ImageUrl,
-                }),
-        });
+        return View(
+            new CatalogViewModel()
+            {
+                BrandId = filter.BrandId,
+                SectionId = filter.SectionId,
+                Products =
+                    products
+                    .OrderBy(el => el.Order)
+                    .Select(
+                        el => new ProductViewModel()
+                        {
+                            Id = el.Id,
+                            Name = el.Name,
+                            Price = el.Price,
+                            ImageUrl = el.ImageUrl,
+                        }),
+            });
     }
 }

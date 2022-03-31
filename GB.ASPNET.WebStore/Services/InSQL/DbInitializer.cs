@@ -51,9 +51,9 @@ public class DbInitializer : IDbInitializer
             await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
             {
                 await _dbContext.Sections.AddRangeAsync(TestData.Sections, cancel).ConfigureAwait(false);
-                await _dbContext.Database.ExecuteSqlRawAsync("SET INDENTITY_INSERT [dbo].[Sections] ON", cancel).ConfigureAwait(false);
+                await _dbContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] ON", cancel).ConfigureAwait(false);
                 await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-                await _dbContext.Database.ExecuteSqlRawAsync("SET INDENTITY_INSERT [dbo].[Sections] OFF", cancel).ConfigureAwait(false);
+                await _dbContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] OFF", cancel).ConfigureAwait(false);
                 await transaction.CommitAsync(cancel).ConfigureAwait(false);
             }
 
@@ -61,9 +61,9 @@ public class DbInitializer : IDbInitializer
             await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
             {
                 await _dbContext.Brands.AddRangeAsync(TestData.Brands, cancel).ConfigureAwait(false);
-                await _dbContext.Database.ExecuteSqlRawAsync("SET INDENTITY_INSERT [dbo].[Brands] ON", cancel).ConfigureAwait(false);
+                await _dbContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[ProductBrands] ON", cancel).ConfigureAwait(false);
                 await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-                await _dbContext.Database.ExecuteSqlRawAsync("SET INDENTITY_INSERT [dbo].[Brands] OFF", cancel).ConfigureAwait(false);
+                await _dbContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[ProductBrands] OFF", cancel).ConfigureAwait(false);
                 await transaction.CommitAsync(cancel).ConfigureAwait(false);
             }
 
@@ -71,9 +71,9 @@ public class DbInitializer : IDbInitializer
             await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
             {
                 await _dbContext.Products.AddRangeAsync(TestData.Products, cancel).ConfigureAwait(false);
-                await _dbContext.Database.ExecuteSqlRawAsync("SET INDENTITY_INSERT [dbo].[Products] ON", cancel).ConfigureAwait(false);
+                await _dbContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] ON", cancel).ConfigureAwait(false);
                 await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-                await _dbContext.Database.ExecuteSqlRawAsync("SET INDENTITY_INSERT [dbo].[Products] OFF", cancel).ConfigureAwait(false);
+                await _dbContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] OFF", cancel).ConfigureAwait(false);
                 await transaction.CommitAsync(cancel).ConfigureAwait(false);
             }
 
