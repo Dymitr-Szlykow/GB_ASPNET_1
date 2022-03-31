@@ -6,14 +6,13 @@ using GB.ASPNET.WebStore.DAL.Context;
 using GB.ASPNET.WebStore.Services;
 using GB.ASPNET.WebStore.Services.Interfaces;
 
-
 WebApplication
     .CreateBuilder(args)
 
     .SetMyServices()
     .Build()
 
-    .SetUpMyDB()
+    .SetUpMyDB().GetAwaiter().GetResult()
     .SetMyMiddlewarePipeline()
     .MapMyRoutes()
     .Run();
@@ -44,13 +43,13 @@ public static class WebStoreBuildHelper
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static WebApplication SetUpMyDB(this WebApplication app)
+    public static async Task<WebApplication> SetUpMyDB(this WebApplication app)
     {
         using (IServiceScope? scope = app.Services.CreateScope())
         {
-            scope.ServiceProvider
+            await scope.ServiceProvider
                 .GetRequiredService<IDbInitializer>()
-                .InitializeAsync(removeBefore: true).RunSynchronously();
+                .InitializeAsync(removeBefore: true);
         }
         return app;
     }
@@ -76,11 +75,10 @@ public static class WebStoreBuildHelper
     {
         _ = app.MapGet("/throw", handler: () => { throw new ApplicationException("Пример ошибки."); });
 
-        _ = app.MapDefaultControllerRoute();
-        //app.MapControllerRoute(
-        //    name: "default",
-        //    pattern: "{controller=Home}/{action=Index}/{id?}"
-        //);
+        //_ = app.MapDefaultControllerRoute();
+        _ = app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
 
         return app;
     }

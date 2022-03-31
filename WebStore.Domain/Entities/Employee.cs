@@ -40,7 +40,7 @@ public class Employee : Entity
         get => age;
         set
         {
-            if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), value, "Значение возраста не может быть меньше нуля");
+            if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value), value, "Значение возраста должно быть положительным.");
             age = value;
         }
     }

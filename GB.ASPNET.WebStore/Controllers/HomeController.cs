@@ -17,7 +17,7 @@ namespace GB.ASPNET.WebStore.Controllers
 
         public IActionResult Index([FromServices]IProductData data)
         {
-            ViewBag.Product = data
+            ViewBag.Products = data
                 .GetProducts()
                 .OrderBy(el => el.Order)
                 .Take(6)

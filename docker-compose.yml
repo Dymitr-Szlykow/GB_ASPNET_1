@@ -3,7 +3,7 @@ version: '3.4'
 services:
   db:
     container_name: MSSQL
-    image:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
 
   gb.aspnet.webstore:
     image: ${DOCKER_REGISTRY-}gbaspnetwebstore
