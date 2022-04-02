@@ -1,8 +1,10 @@
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using GB.ASPNET.WebStore.Infrastructure.Conventions;
 using GB.ASPNET.WebStore.Infrastructure.Middleware;
 using GB.ASPNET.WebStore.DAL.Context;
+using GB.ASPNET.WebStore.Domain.Entities.Identity;
 using GB.ASPNET.WebStore.Services;
 using GB.ASPNET.WebStore.Services.Interfaces;
 
@@ -25,19 +27,50 @@ public static class WebStoreBuildHelper
     {
         _ = builder.Services
             .AddDbContext<WebStoreDB>(
-                opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
-            )
+                opt => opt.UseSqlServer(
+                    builder.Configuration.GetConnectionString(
+                    builder.Configuration["Database"]
+            )))
             .AddTransient<IDbInitializer, DbInitializer>()
             .AddScoped<IEmployeesData, InMemoryEmployeesData>()
             //.AddScoped<IProductData, InMemoryProductData>();
             .AddScoped<IProductData, SqlProductData>();
 
-        _ = builder.Services.AddControllersWithViews();
-        //_ = builder.Services.AddControllersWithViews(opt =>
-        //{
-        //    opt.Conventions.Clear();
-        //    opt.Conventions.Add(new DeletemeConvention());
-        //});
+        _ = builder.Services.AddIdentity<User, Role>(/*opt => { }*/)
+                .AddEntityFrameworkStores<WebStoreDB>()
+                .AddDefaultTokenProviders();
+
+        _ = builder.Services.AddControllersWithViews(/*opt => { opt.Conventions.Add(new DeletemeConvention()); }*/);
+
+        _ = builder.Services
+            .Configure<IdentityOptions>(opt =>
+            {
+#if DEBUG
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequiredUniqueChars = 3;
+#endif
+
+                opt.User.RequireUniqueEmail = false;
+                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwqyxABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+                opt.Lockout.AllowedForNewUsers = false;
+                opt.Lockout.MaxFailedAccessAttempts = 10;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            })
+            .ConfigureApplicationCookie(opt =>
+            {
+                opt.Cookie.Name = "GBWebStore";
+                opt.Cookie.HttpOnly = true;
+                opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+                opt.LoginPath = "/Account/Login";
+                opt.LogoutPath = "/Account/Logout";
+                opt.AccessDeniedPath = "/Account/AccessDenied";
+                opt.SlidingExpiration = true;
+            });
 
         return builder;
     }
@@ -64,8 +97,10 @@ public static class WebStoreBuildHelper
 
         _ = app
             .UseStaticFiles()
-            .UseRouting();
-            //.UseMiddleware<DeletemeMiddleware>();  // custom middleware
+            .UseRouting()
+            //.UseMiddleware<DeletemeMiddleware>()  // custom middleware
+            .UseAuthentication()
+            .UseAuthorization();
 
         return app;
     }
