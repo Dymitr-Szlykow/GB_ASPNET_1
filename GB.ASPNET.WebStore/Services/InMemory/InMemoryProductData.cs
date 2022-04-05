@@ -5,9 +5,14 @@ using GB.ASPNET.WebStore.Services.Interfaces;
 
 namespace GB.ASPNET.WebStore.Services;
 
+[Obsolete("Устарел. Использется БД: SqlProductData", error: true)]
 public class InMemoryProductData : IProductData
 {
+    public Brand? GetBrandById(int id) => TestData.Brands.FirstOrDefault(b => b.Id == id);
+
     public IEnumerable<Brand> GetBrands() => TestData.Brands;
+
+    public Product? GetProductById(int id) => TestData.Products.FirstOrDefault(p => p.Id == id);
 
     public IEnumerable<Product> GetProducts(ProductFilter? filter = null)
     {
@@ -24,6 +29,8 @@ public class InMemoryProductData : IProductData
 
         return query;
     }
+
+    public Section? GetSectionById(int id) => TestData.Sections.FirstOrDefault(el => el.Id == id);
 
     public IEnumerable<Section> GetSections() => TestData.Sections;
 }

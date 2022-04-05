@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using GB.ASPNET.WebStore.Domain.Entities;
+using GB.ASPNET.WebStore.Domain.Entities.Identity;
 using GB.ASPNET.WebStore.Models;
 using GB.ASPNET.WebStore.ViewModels;
 using GB.ASPNET.WebStore.Services;
@@ -7,8 +9,7 @@ using GB.ASPNET.WebStore.Services.Interfaces;
 
 namespace GB.ASPNET.WebStore.Controllers;
 
-//[Controller]
-//[Route("staff/{action=Index}/{id?}")]
+[Authorize]
 public class EmployeesController : Controller
 {
     private readonly IEmployeesData _employeesData;
@@ -19,6 +20,7 @@ public class EmployeesController : Controller
         _employeesData = employeesData;
         _logger = logger;
     }
+
 
     public IActionResult Index()
     {
@@ -38,7 +40,6 @@ public class EmployeesController : Controller
         return View(listViewmodel);
     }
 
-    //[Route("~/EmployeeInfo({id:int})")]
     public IActionResult Details(int id)
     {
         Employee? model = _employeesData.GetById(id);
@@ -46,11 +47,13 @@ public class EmployeesController : Controller
         else return View(model.ToViewmodel());
     }
 
+    [Authorize(Roles = Role.administrators)]
     public IActionResult Create()
     {
         return View("Update", new EmployeeVM());
     }
 
+    [Authorize(Roles = Role.administrators)]
     public IActionResult Update(int? sentId)
     {
         if (sentId is null) return View(new EmployeeVM());
@@ -61,6 +64,7 @@ public class EmployeesController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = Role.administrators)]
     public IActionResult Update(EmployeeVM viewmodel)
     {
         if (viewmodel.NameLast == "Иванов" && viewmodel.Age < 21)
@@ -84,6 +88,7 @@ public class EmployeesController : Controller
         }
     }
 
+    [Authorize(Roles = Role.administrators)]
     public IActionResult Delete(int id)
     {
         if (id < 0) return BadRequest();
@@ -93,6 +98,7 @@ public class EmployeesController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = Role.administrators)]
     public IActionResult DeleteConfirm(int id)
     {
         if(!_employeesData.Delete(id)) return NotFound();

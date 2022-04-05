@@ -16,15 +16,4 @@ public class WebStoreDB : IdentityDbContext<User, Role, string>
     public DbSet<Employee> Employees { get; set; }
 
     public WebStoreDB(DbContextOptions<WebStoreDB> options) : base(options) { }
-
-
-    //protected override void OnModelCreating(ModelBuilder builder)
-    //{
-    //    base.OnModelCreating(builder);
-
-    //    builder.Entity<Brand>()
-    //        .HasMany(brand => brand.Products)
-    //        .WithOne(product => product.Brand)
-    //        .OnDelete(DeleteBehavior.Cascade);
-    //}
 }

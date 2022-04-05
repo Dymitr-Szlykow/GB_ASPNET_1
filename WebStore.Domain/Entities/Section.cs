@@ -12,7 +12,7 @@ public class Section : NamedEntity, IOrderedEntity
     public int Order { get; set; }
 
     [ForeignKey(nameof(ParentId))]
-    public string? Parent { get; set; }
+    public Section? Parent { get; set; }
     public int? ParentId { get; set; }
 
     public ICollection<Product> Products { get; set; } = new HashSet<Product>();

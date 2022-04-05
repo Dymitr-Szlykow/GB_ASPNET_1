@@ -1,0 +1,168 @@
+﻿@using GB.ASPNET.WebStore.ViewModels @* из-зи глюков IntelliSense *@
+@model GB.ASPNET.WebStore.ViewModels.CartVM
+@{
+	ViewBag.Title = "Ваша корзина";
+}
+<section id="cart_items">
+	<div class="container">
+
+		<div class="breadcrumbs">
+			<ol class="breadcrumb">
+				<li><a asp-controller="Home" asp-action="Index">Home</a></li>
+				<li class="active">Shopping Корзина</li>
+			</ol>
+		</div>
+
+		<div class="table-responsive cart_info">
+			<table class="table table-condensed">
+				<thead>
+					<tr class="cart_menu">
+						<th class="image">Товар</th>
+						<th class="description">Описание</th>
+						<th class="price">Цена</th>
+						<th class="quantity">Количество</th>
+						<th class="total">Сумма</th>
+						<th></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					@foreach ((ProductViewModel product, int quantity) in Model.Items)
+					{
+						<tr>
+							<td class="cart_product">
+								<a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id" title="К описанию товара">
+									<img src="~/images/shop/@product.ImageUrl" alt="@product.Name">
+								</a>
+							</td>
+
+							<td class="cart_description">
+								<h4><a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id" title="К описанию товара">@product.Name</a></h4>
+								<p>Артикул: @product.Id.ToString("0000000")</p>
+							</td>
+
+							<td class="cart_price">
+								<p>@product.Price.ToString("C")</p>
+							</td>
+
+							<td class="cart_quantity">
+								<div class="cart_quantity_button">
+									<a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" class="cart_quantity_up"> + </a>
+									@*<input class="cart_quantity_input" type="text" name="quantity" value="@quantity" autocomplete="off" size="2">*@
+									<p class="cart_quantity_input">@quantity</p>
+									<a asp-controller="Cart" asp-action="RemoveOne" asp-route-id="@product.Id" class="cart_quantity_down"> - </a>
+								</div>
+							</td>
+
+							<td class="cart_total">
+								<p class="cart_total_price">@((product.Price * quantity).ToString("C"))</p>
+							</td>
+
+							<td class="cart_delete">
+								<a asp-controller="Cart" asp-action="RemoveTitle" asp-route-id="@product.Id" class="cart_quantity_delete"><i class="fa fa-times"></i></a>
+							</td>
+						</tr>
+					}
+					<tr>
+						<td class="cart_product"><p>Общее</p></td>
+						<td class="cart_description"><p>см.</p></td>
+						<td class="cart_price"><p>см.</p></td>
+						<td class="cart_quantity">
+							<p>@Model.ItemsCount</p>
+						</td>
+						<td class="cart_total">
+							<p class="cart_total_price">@Model.TotalPrice</p>
+						</td>
+						<td class="cart_delete">
+							<a asp-controller="Cart" asp-action="Clear" class="cart_quantity_delete"><i class="fa fa-times"></i></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section> <!--/#cart_items-->
+
+<section id="do_action">
+	<div class="container">
+
+		<div class="heading">
+			<h3>Что мы сделаем с этим дальше?</h3>
+			<p>Выберите, есть ли у вас код скидки или бонусные баллы, которые вы хотите использовать или хотите сделать скуидку на доставку.</p>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="chose_area">
+
+					<ul class="user_option">
+						<li>
+							<input type="checkbox">
+							<label>Использовать промокод</label>
+						</li>
+						<li>
+							<input type="checkbox">
+							<label>Использовать сертификат</label>
+						</li>
+						<li>
+							<input type="checkbox">
+							<label>Рассчитать доставку и налоги</label>
+						</li>
+					</ul>
+
+					<ul class="user_info">
+						<li class="single_field">
+							<label>Страна:</label>
+							<select>
+								<option>США</option>
+								<option>Бангладеш</option>
+								<option>Англия</option>
+								<option>Индия</option>
+								<option>Пакистан</option>
+								<option>Россия</option>
+								<option>Канада</option>
+								<option>Дубаи</option>
+							</select>
+								
+						</li>
+						<li class="single_field">
+							<label>Область/штат:</label>
+							<select>
+								<option>Выберите</option>
+								<option>Дакка</option>
+								<option>Лондон</option>
+								<option>Диллих</option>
+								<option>Лахор</option>
+								<option>Аляска</option>
+								<option>Канада</option>
+								<option>Дубаи</option>
+							</select>
+							
+						</li>
+						<li class="single_field zip-field">
+							<label>Индакс:</label>
+							<input type="text">
+						</li>
+					</ul>
+
+					<a class="btn btn-default update" href="">Get Quotes</a>
+					<a class="btn btn-default check_out" href="">Продолжить</a>
+				</div>
+			</div>
+
+			<div class="col-sm-6">
+				<div class="total_area">
+					<ul>
+						<li>Подитог <span>@Model.TotalPrice.ToString("C")</span></li>
+						<li>Эко-сбор <span>not implemented</span></li>
+						<li>Стоимость доставки <span>бесплатно</span></li>
+						<li>Итого <span>@Model.TotalPrice.ToString("C")</span></li>
+					</ul>
+
+					<a class="btn btn-default update" href="">Обновить</a>
+					<a class="btn btn-default check_out" href="">Оформить заказ</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section><!--/#do_action-->

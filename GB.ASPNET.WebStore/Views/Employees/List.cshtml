@@ -15,7 +15,10 @@
                     <th>Отчество</th>
                     <th>Возраст</th>
                     <th>Ф.И.О.</th>
-                    <th></th>
+                    @if (User.IsInRole(Role.administrators))
+                    {
+                        <th></th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -28,14 +31,17 @@
                         <td>@emp.Age.ToString() @GB.ASPNET.WebStore.Models.General.AgeUnit(emp.Age)</td>
                         <td>@emp.NameShort</td>
                         <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@emp.Id">подробно</a></td>
-                        <td>
-                            <a asp-controller="Employees" asp-action="Update" asp-route-id="@emp.Id">
-                                <span class="fa fa-edit"></span>
-                            </a> |
-                            <a asp-controller="Employees" asp-action="Delete" asp-route-id="@emp.Id" class="text-danger">
-                                <span class="fa fa-times" ></span>
-                            </a>
-                        </td>
+                        @if (User.IsInRole(Role.administrators))
+                        {
+                            <td>
+                                <a asp-controller="Employees" asp-action="Update" asp-route-id="@emp.Id">
+                                    <span class="fa fa-edit"></span>
+                                </a> |
+                                <a asp-controller="Employees" asp-action="Delete" asp-route-id="@emp.Id" class="text-danger">
+                                    <span class="fa fa-times" ></span>
+                                </a>
+                            </td>   
+                        }
                     </tr>
                 }
             </tbody>
@@ -46,10 +52,13 @@
         <p>Сотрудников нет.</p>
     }
 
-    <p>
-        <a asp-controller="Employees" asp-action="Create">Новая запись</a>
-        или же
-        <a asp-controller="Employees" asp-action="Update">Запись новая</a>
-    </p>
-    <p><a asp-controller="Home" asp-action="Index">На главную</a></p>
+    @if (User.IsInRole(Role.administrators))
+    {
+        <p>
+            <a asp-controller="Employees" asp-action="Create">Новая запись</a>
+            или же
+            <a asp-controller="Employees" asp-action="Update">Запись новая</a>
+        </p>
+        <p><a asp-controller="Home" asp-action="Index">На главную</a></p>
+    }
 </div>
