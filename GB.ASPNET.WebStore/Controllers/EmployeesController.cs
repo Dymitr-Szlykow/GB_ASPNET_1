@@ -26,7 +26,7 @@ public class EmployeesController : Controller
     {
         var listViewmodel = new List<EmployeeVM>();
         foreach (Employee employee in _employeesData.GetAll())
-            listViewmodel.Add(employee.ToViewmodel());
+            listViewmodel.Add(employee.ToViewmodel()!);
 
         return View("List", listViewmodel);
     }
@@ -35,7 +35,7 @@ public class EmployeesController : Controller
     {
         var listViewmodel = new List<EmployeeVM>();
         foreach (Employee employee in _employeesData.GetAll())
-            listViewmodel.Add(employee.ToViewmodel());
+            listViewmodel.Add(employee.ToViewmodel()!);
 
         return View(listViewmodel);
     }
@@ -71,7 +71,7 @@ public class EmployeesController : Controller
             ModelState.AddModelError(key: string.Empty, errorMessage: "Никаких Ивановых младше 21 года. Ну ладно, Ивановой можно.");
         if (!ModelState.IsValid) return View(viewmodel);
 
-        Employee employee = viewmodel.ToEntityModel();
+        Employee employee = viewmodel?.ToEntityModel()!;
         if (employee.Id == 0)
         {
             int? newId = _employeesData.Add(employee);

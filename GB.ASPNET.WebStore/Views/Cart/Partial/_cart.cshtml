@@ -1,0 +1,70 @@
+﻿@model CartVM
+@{
+}
+<div class="table-responsive cart_info">
+	<table class="table table-condensed">
+		<thead>
+			<tr class="cart_menu">
+				<th class="image">Товар</th>
+				<th class="description">Описание</th>
+				<th class="price">Цена</th>
+				<th class="quantity">Количество</th>
+				<th class="total">Сумма</th>
+				<th></th>
+			</tr>
+		</thead>
+
+		<tbody>
+			@foreach ((ProductViewModel product, int quantity) in Model.Items)
+			{
+				<tr>
+					<td class="cart_product">
+						<a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id" title="К описанию товара">
+							<img src="~/images/shop/@product.ImageUrl" alt="@product.Name">
+						</a>
+					</td>
+
+					<td class="cart_description">
+						<h4><a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id" title="К описанию товара">@product.Name</a></h4>
+						<p>Артикул: @product.Id.ToString("0000000")</p>
+					</td>
+
+					<td class="cart_price">
+						<p>@product.Price.ToString("C")</p>
+					</td>
+
+					<td class="cart_quantity">
+						<div class="cart_quantity_button">
+							<a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" class="cart_quantity_up"> + </a>
+							@*<input class="cart_quantity_input" type="text" name="quantity" value="@quantity" autocomplete="off" size="2">*@
+							<p class="cart_quantity_input">@quantity</p>
+							<a asp-controller="Cart" asp-action="RemoveOne" asp-route-id="@product.Id" class="cart_quantity_down"> - </a>
+						</div>
+					</td>
+
+					<td class="cart_total">
+						<p class="cart_total_price">@((product.Price * quantity).ToString("C"))</p>
+					</td>
+
+					<td class="cart_delete">
+						<a asp-controller="Cart" asp-action="RemoveTitle" asp-route-id="@product.Id" class="cart_quantity_delete"><i class="fa fa-times"></i></a>
+					</td>
+				</tr>
+			}
+			<tr>
+				<td class="cart_product"><p>Общее</p></td>
+				<td class="cart_description"><p>см.</p></td>
+				<td class="cart_price"><p>см.</p></td>
+				<td class="cart_quantity">
+					<p>@Model.ItemsCount</p>
+				</td>
+				<td class="cart_total">
+					<p class="cart_total_price">@Model.TotalPrice</p>
+				</td>
+				<td class="cart_delete">
+					<a asp-controller="Cart" asp-action="Clear" class="cart_quantity_delete"><i class="fa fa-times"></i></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

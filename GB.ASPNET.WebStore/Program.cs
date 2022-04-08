@@ -36,43 +36,54 @@ public static class WebStoreBuildHelper
             .AddScoped<IEmployeesData,InMemoryEmployeesData>()
             .AddScoped<IProductData,SqlProductData>()
             .AddScoped<ICart,InCookiesCart>()
+            .AddScoped<IOrderService,SqlOrderData>()
+            .AddScoped<IVeiwAdminIndexData,AdminHomeIndexData>()
             .AddAutoMapper(typeof(Program)); //.AddAutoMapper(Assembly.GetEntryAssembly());
 
         _ = builder.Services.AddIdentity<User,Role>(/*opt => { }*/)
                 .AddEntityFrameworkStores<WebStoreDB>()
                 .AddDefaultTokenProviders();
 
-        _ = builder.Services.AddControllersWithViews(/*opt => { opt.Conventions.Add(new DeletemeConvention()); }*/);
-
         _ = builder.Services
-            .Configure<IdentityOptions>(opt =>
-            {
+
+            .AddControllersWithViews(
+                opt =>
+                {
+                    //opt.Conventions.Add(new DeletemeConvention());
+                    opt.Conventions.Add(new SetAreaControllersRoute());
+                }).Services
+
+            .Configure<IdentityOptions>(
+                opt =>
+                {
 #if DEBUG
-                opt.Password.RequireDigit = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequiredLength = 3;
-                opt.Password.RequiredUniqueChars = 3;
+                    opt.Password.RequireDigit = false;
+                    opt.Password.RequireLowercase = false;
+                    opt.Password.RequireUppercase = false;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequiredLength = 3;
+                    opt.Password.RequiredUniqueChars = 3;
 #endif
 
-                opt.User.RequireUniqueEmail = false;
-                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwqyxABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                    opt.User.RequireUniqueEmail = false;
+                    opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwqyxABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-                opt.Lockout.AllowedForNewUsers = false;
-                opt.Lockout.MaxFailedAccessAttempts = 10;
-                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-            })
-            .ConfigureApplicationCookie(opt =>
-            {
-                opt.Cookie.Name = "GBWebStore";
-                opt.Cookie.HttpOnly = true;
-                opt.ExpireTimeSpan = TimeSpan.FromDays(1);
-                opt.LoginPath = "/Account/Login";
-                opt.LogoutPath = "/Account/Logout";
-                opt.AccessDeniedPath = "/Account/AccessDenied";
-                opt.SlidingExpiration = true;
-            });
+                    opt.Lockout.AllowedForNewUsers = false;
+                    opt.Lockout.MaxFailedAccessAttempts = 10;
+                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                })
+
+            .ConfigureApplicationCookie(
+                opt =>
+                {
+                    opt.Cookie.Name = "GBWebStore";
+                    opt.Cookie.HttpOnly = true;
+                    opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+                    opt.LoginPath = "/Account/Login";
+                    opt.LogoutPath = "/Account/Logout";
+                    opt.AccessDeniedPath = "/Account/AccessDenied";
+                    opt.SlidingExpiration = true;
+                });
 
         return builder;
     }
@@ -112,10 +123,22 @@ public static class WebStoreBuildHelper
     {
         _ = app.MapGet("/throw", handler: () => { throw new ApplicationException("Пример ошибки."); });
 
-        //_ = app.MapDefaultControllerRoute();
-        _ = app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+        _ = app.UseEndpoints(
+            endpoints =>
+            {
+                _ = endpoints.MapControllerRoute(
+                    name: "ActionRoute",
+                    pattern: "{controller}.{action}({a}, {b})"
+                );
+                _ = endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+                _ = endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                );//.MapDefaultControllerRoute();
+            });
 
         return app;
     }

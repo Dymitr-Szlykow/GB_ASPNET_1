@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using GB.ASPNET.WebStore.Domain.Entities.Orders;
 using GB.ASPNET.WebStore.Models;
 using GB.ASPNET.WebStore.ViewModels;
 using GB.ASPNET.WebStore.Services;
@@ -20,7 +22,7 @@ public class CartController : Controller
 
     public IActionResult Add(int id, int? num)
     {
-        _CartService.Add(id);
+        _CartService.Add(id, null);
         return RedirectToAction("Index");
     }
 
@@ -31,7 +33,7 @@ public class CartController : Controller
     }
 
     public IActionResult Index()
-        => View(_CartService.GetViewmodel());
+        => View(new CartOrderVM { Cart = _CartService.GetViewmodel() });
 
     public IActionResult RemoveOne(int id)
     {
@@ -43,5 +45,33 @@ public class CartController : Controller
     {
         _CartService.RemoveTitle(id);
         return RedirectToAction("Index");
+    }
+
+    [Authorize]
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> CheckOut(OrderVM viewmodel, [FromServices] IOrderService orderService)
+    {
+        if (!ModelState.IsValid) return View(
+            viewName: "Index",
+            new CartOrderVM
+            {
+                Cart = _CartService.GetViewmodel(),
+                Order = viewmodel
+            });
+        else
+        {
+            Order? order = await orderService.CreateOrderAsync(
+                userName: User.Identity!.Name!,
+                cart: _CartService.GetViewmodel(),
+                order: viewmodel);
+            _CartService.Clear();
+            return RedirectToAction(nameof(ConfirmedOrder), new { order.Id });
+        }
+    }
+
+    public IActionResult ConfirmedOrder(int id)
+    {
+        ViewBag.OrderId = id;
+        return View();
     }
 }
