@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,12 +32,13 @@ public static class WebStoreBuildHelper
                     builder.Configuration.GetConnectionString(
                     builder.Configuration["Database"]
             )))
-            .AddTransient<IDbInitializer, DbInitializer>()
-            .AddScoped<IEmployeesData, InMemoryEmployeesData>()
-            //.AddScoped<IProductData, InMemoryProductData>();
-            .AddScoped<IProductData, SqlProductData>();
+            .AddTransient<IDbInitializer,DbInitializer>()
+            .AddScoped<IEmployeesData,InMemoryEmployeesData>()
+            .AddScoped<IProductData,SqlProductData>()
+            .AddScoped<ICart,InCookiesCart>()
+            .AddAutoMapper(typeof(Program)); //.AddAutoMapper(Assembly.GetEntryAssembly());
 
-        _ = builder.Services.AddIdentity<User, Role>(/*opt => { }*/)
+        _ = builder.Services.AddIdentity<User,Role>(/*opt => { }*/)
                 .AddEntityFrameworkStores<WebStoreDB>()
                 .AddDefaultTokenProviders();
 

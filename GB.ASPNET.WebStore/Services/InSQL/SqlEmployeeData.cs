@@ -3,7 +3,7 @@ using GB.ASPNET.WebStore.Domain;
 using GB.ASPNET.WebStore.Domain.Entities;
 using GB.ASPNET.WebStore.Services.Interfaces;
 
-namespace GB.ASPNET.WebStore.Services.InSQL;
+namespace GB.ASPNET.WebStore.Services;
 
 public class SqlEmployeeData : IEmployeesData
 {

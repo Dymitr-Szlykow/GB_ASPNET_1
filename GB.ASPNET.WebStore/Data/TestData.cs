@@ -78,4 +78,42 @@ public class TestData
         new Product { Id = 11, Name = "Джинсы женские", Price = 1025, ImageUrl = "product11.jpg", Order = 10, SectionId = 25, BrandId = 3 },
         new Product { Id = 12, Name = "Летний костюм", Price = 1025, ImageUrl = "product12.jpg", Order = 11, SectionId = 25, BrandId = 3 },
     };
+
+
+    public static (IEnumerable<Section>, IEnumerable<Brand>, IEnumerable<Product>) CleanHardCodeAndGetCatalogForSql()
+    {
+        Dictionary<int,Section> sectionsPool = Sections.ToDictionary(el => el.Id);
+        foreach (Section childSection in Sections.Where(el => el.ParentId is not null))
+            childSection.Parent = sectionsPool[(int)childSection.ParentId!];
+
+        Dictionary<int,Brand> brandsPool = Brands.ToDictionary(el => el.Id);
+
+        foreach (var product in Products)
+        {
+            product.Section = sectionsPool[product.SectionId];
+            if (product.BrandId is not null)
+                product.Brand = brandsPool[(int)product.BrandId];
+
+            product.Id = 0;
+            product.SectionId = 0;
+            product.BrandId = null;
+        }
+
+        foreach (Brand brand in Brands)
+            brand.Id = 0;
+
+        foreach (Section section in Sections)
+        {
+            section.Id = 0;
+            section.ParentId = null;
+        }
+
+        return (Sections, Brands, Products);
+    }
+
+    public static void CleanHardCodeInEmployees()
+    {
+        foreach (var employee in Employees)
+            employee.Id = 0;
+    }
 }

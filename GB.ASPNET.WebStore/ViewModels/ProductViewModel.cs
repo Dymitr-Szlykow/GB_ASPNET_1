@@ -19,4 +19,7 @@ public class ProductViewModel
     [HiddenInput(DisplayValue = false)]
     [Required(ErrorMessage = "Путь к изображению товара является обязательным.")]
     public string ImageUrl { get; set; } = null!;
+
+    public string? BrandName { get; set; }
+    public string SectionName { get; set; } = null!;
 }

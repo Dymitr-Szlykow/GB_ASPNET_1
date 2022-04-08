@@ -8,3 +8,6 @@ libman/
 obj/
 Obj/
 Debug/
+
+**/wwwroot/css/site.*
+**/wwwroot/js/site.*

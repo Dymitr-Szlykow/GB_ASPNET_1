@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GB.ASPNET.WebStore.Domain;
+using GB.ASPNET.WebStore.Models;
 using GB.ASPNET.WebStore.Services.Interfaces;
 using GB.ASPNET.WebStore.ViewModels;
 
@@ -25,17 +26,24 @@ public class CatalogController : Controller
             {
                 BrandId = filter.BrandId,
                 SectionId = filter.SectionId,
-                Products =
-                    products
+                Products = products
                     .OrderBy(el => el.Order)
-                    .Select(
-                        el => new ProductViewModel()
-                        {
-                            Id = el.Id,
-                            Name = el.Name,
-                            Price = el.Price,
-                            ImageUrl = el.ImageUrl,
-                        }),
+                    .ToViewmodels()!
             });
+    }
+
+    public IActionResult Details(int id)
+    {
+        var product = _data.GetProductById(id);
+        if (product is null) return NotFound();
+        else
+        {
+            ViewBag.Products = _data
+                .GetProducts()
+                .OrderBy(el => el.Order)
+                .Take(6)
+                .ToViewmodels();
+            return View(product.ToViewmodel());
+        }
     }
 }
