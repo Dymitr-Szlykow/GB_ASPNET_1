@@ -22,24 +22,24 @@ public class SqlOrderData : IOrderService
     }
 
 
-    public async Task<Order> CreateOrderAsync(string userName, CartVM cart, OrderVM order, CancellationToken token = default)
+    public async Task<Order> CreateOrderAsync(string userName, CartVM cart, OrderVM orderModel, CancellationToken token = default)
     {
         var user = await _userManager.FindByNameAsync(userName).ConfigureAwait(continueOnCapturedContext: false);
         if (user is null)
         {
-            _logger.LogError("Создание заказа: пользователя с именем {userName} в системе не найден.", userName);
-            throw new InvalidOperationException($"Пользователя с именем {userName} в системе не найден.");
+            _logger.LogError("Создание заказа: пользователь с именем {userName} в системе не найден.", userName);
+            throw new InvalidOperationException($"Пользователь с именем {userName} в системе не найден.");
         }
         else
         {
-            await using var transaction = await _dbContext.BeginTransactionAsync(token).ConfigureAwait(false);
+            await using var transaction = await _dbContext.Database.BeginTransactionAsync(token).ConfigureAwait(false);
 
             var order = new Order
             {
                 User = user,
-                Address = viewmodel.Address,
-                Phone = viewmodel.Phone,
-                Description = viewmodel.Description,
+                Address = orderModel.Address,
+                Phone = orderModel.Phone,
+                Description = orderModel.Description,
             };
 
             int[]? ids = cart.Items.Select(el => el.Product.Id).ToArray();
@@ -61,18 +61,17 @@ public class SqlOrderData : IOrderService
                 .ToArray();
 
             await _dbContext.Orders.AddAsync(order, token).ConfigureAwait(continueOnCapturedContext: false);
-            await _dbContext.SaveChanges(token).ConfigureAwait(continueOnCapturedContext: false);
-
-            await transaction.CommitAsync().ConfigureAwait(false);
+            await _dbContext.SaveChangesAsync(token).ConfigureAwait(continueOnCapturedContext: false);
+            await transaction.CommitAsync(token).ConfigureAwait(false);
             return order;
         }
     }
 
-    public async Task<Order> GetOrderByIdAsync(int id, CancellationToken token = default)
+    public async Task<Order?> GetOrderByIdAsync(int id, CancellationToken token = default)
     {
-        var order = _dbContext.Orders
+        var order = await _dbContext.Orders
             .Include(el => el.User)
-            .Include(el => el.Item)
+            .Include(el => el.Items)
             .ThenInclude(el => el.Product)
             .FirstOrDefaultAsync(order => order.Id == id)
             .ConfigureAwait(continueOnCapturedContext: false);
@@ -81,13 +80,13 @@ public class SqlOrderData : IOrderService
 
     public async Task<IEnumerable<Order>> GetUserOrdersAsync(string userName, CancellationToken token = default)
     {
-        var orders = _dbContext.Orders
+        var orders = await _dbContext.Orders
             .Include(el => el.User)
-            .Include(el => el.Item)
+            .Include(el => el.Items)
             .ThenInclude(el => el.Product)
             .Where(order => order.User.UserName == userName)
             .ToArrayAsync(token)
             .ConfigureAwait(continueOnCapturedContext: false);
-        return orders
+        return orders;
     }
 }

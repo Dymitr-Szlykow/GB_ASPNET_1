@@ -2,10 +2,10 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using GB.ASPNET.WebStore.Infrastructure.Conventions;
-using GB.ASPNET.WebStore.Infrastructure.Middleware;
 using GB.ASPNET.WebStore.DAL.Context;
 using GB.ASPNET.WebStore.Domain.Entities.Identity;
+using GB.ASPNET.WebStore.Infrastructure.Conventions;
+using GB.ASPNET.WebStore.Infrastructure.Middleware;
 using GB.ASPNET.WebStore.Services;
 using GB.ASPNET.WebStore.Services.Interfaces;
 
@@ -26,33 +26,42 @@ public static class WebStoreBuildHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplicationBuilder SetMyServices(this WebApplicationBuilder builder)
     {
-        _ = builder.Services
-            .AddDbContext<WebStoreDB>(
-                opt => opt.UseSqlServer(
-                    builder.Configuration.GetConnectionString(
-                    builder.Configuration["Database"]
-            )))
-            .AddTransient<IDbInitializer,DbInitializer>()
-            .AddScoped<IEmployeesData,InMemoryEmployeesData>()
-            .AddScoped<IProductData,SqlProductData>()
-            .AddScoped<ICart,InCookiesCart>()
-            .AddScoped<IOrderService,SqlOrderData>()
-            .AddScoped<IVeiwAdminIndexData,AdminHomeIndexData>()
-            .AddAutoMapper(typeof(Program)); //.AddAutoMapper(Assembly.GetEntryAssembly());
+        string? db = builder.Configuration["Database"];
 
-        _ = builder.Services.AddIdentity<User,Role>(/*opt => { }*/)
+        _ = db switch
+        {
+            "SqlServer" or "DockerDB"
+                => builder.Services.AddDbContext<WebStoreDB>(opt =>
+                    opt.UseSqlServer(builder.Configuration.GetConnectionString(db))),
+            "Sqlite"
+                => builder.Services.AddDbContext<WebStoreDB>(opt =>
+                    opt.UseSqlite(
+                        builder.Configuration.GetConnectionString(db),
+                        arg => arg.MigrationsAssembly("WebStore.DAL.Sqlite"))),
+            _ => throw new ApplicationException("Ошибка чтения строки подключения к БД.")
+        };
+
+        _ = builder.Services
+            .AddTransient<IDbInitializer, DbInitializer>()
+            .AddScoped<IEmployeesData, InMemoryEmployeesData>()
+            .AddScoped<IProductData, SqlProductData>()
+            .AddScoped<ICart, InCookiesCart>()
+            .AddScoped<IOrderService, SqlOrderData>()
+            .AddScoped<IVeiwAdminIndexData, AdminHomeIndexData>()
+
+            .AddAutoMapper(typeof(Program)) //.AddAutoMapper(Assembly.GetEntryAssembly());
+            .AddIdentity<User, Role>(/*opt => { }*/)
                 .AddEntityFrameworkStores<WebStoreDB>()
-                .AddDefaultTokenProviders();
-
-        _ = builder.Services
-
+                .AddDefaultTokenProviders()
+                .Services
             .AddControllersWithViews(
                 opt =>
                 {
                     //opt.Conventions.Add(new DeletemeConvention());
                     opt.Conventions.Add(new SetAreaControllersRoute());
-                }).Services
+                });
 
+        _ = builder.Services
             .Configure<IdentityOptions>(
                 opt =>
                 {
@@ -72,7 +81,6 @@ public static class WebStoreBuildHelper
                     opt.Lockout.MaxFailedAccessAttempts = 10;
                     opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
                 })
-
             .ConfigureApplicationCookie(
                 opt =>
                 {

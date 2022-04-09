@@ -8,7 +8,7 @@ namespace GB.ASPNET.WebStore.Domain.Entities.Orders;
 public class OrderItem : Entity
 {
     [Required]
-    public Product Product { get; set; }
+    public Product Product { get; set; } = null!;
 
     [Column(TypeName = "decimal(18,2")]
     public decimal Price { get; set; }
