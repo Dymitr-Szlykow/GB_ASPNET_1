@@ -38,7 +38,7 @@ public static class WebStoreBuildHelper
                     opt.UseSqlite(
                         builder.Configuration.GetConnectionString(db),
                         arg => arg.MigrationsAssembly("WebStore.DAL.Sqlite"))),
-            _ => throw new ApplicationException("ÐžÑˆÐ¸Ð±ÐºÐ° Ñ‡Ñ‚ÐµÐ½Ð¸Ñ ÑÑ‚Ñ€Ð¾ÐºÐ¸ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ Ðº Ð‘Ð”.")
+            _ => throw new ApplicationException("Îøèáêà ÷òåíèÿ ñòðîêè ïîäêëþ÷åíèÿ ê ÁÄ.")
         };
 
         _ = builder.Services
@@ -129,7 +129,7 @@ public static class WebStoreBuildHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplication MapMyRoutes(this WebApplication app)
     {
-        _ = app.MapGet("/throw", handler: () => { throw new ApplicationException("ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ð¾ÑˆÐ¸Ð±ÐºÐ¸."); });
+        _ = app.MapGet("/throw", handler: () => { throw new ApplicationException("Ïðèìåð îøèáêè."); });
 
         _ = app.UseEndpoints(
             endpoints =>

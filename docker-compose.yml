@@ -9,4 +9,4 @@ services:
     image: ${DOCKER_REGISTRY-}gbaspnetwebstore
     build:
       context: .
-      dockerfile: GB.ASPNET.WebStore/Dockerfile
+      dockerfile: UI/WebStore.WebApp/Dockerfile

@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
-using Newtonesoft.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Newtonsoft.Json;
 using GB.ASPNET.WebStore.Domain;
 using GB.ASPNET.WebStore.Domain.Entities;
 using GB.ASPNET.WebStore.Models;
@@ -61,7 +63,7 @@ public class InCookiesCart : ICart
     {
         Cart? cart = Cart;
 
-        CartItem item = cart.FirstOrDefault(one => one.ProductId = id);
+        CartItem? item = cart.Items.FirstOrDefault(one => one.ProductId == id);
         if (item is null) cart.Items.Add(item = new CartItem() { ProductId = id, Quantity = 0 });
         if (num.HasValue) item.Quantity += num.Value;
         else item.Quantity++;
@@ -98,7 +100,7 @@ public class InCookiesCart : ICart
     {
         Cart? cart = Cart;
 
-        CartItem item = cart.FirstOrDefault(one => one.ProductId = id);
+        CartItem? item = cart.Items.FirstOrDefault(one => one.ProductId == id);
         if (item is not null)
         {
             if (--item.Quantity <= 0) cart.Items.Remove(item);
@@ -113,7 +115,7 @@ public class InCookiesCart : ICart
     {
         Cart? cart = Cart;
 
-        CartItem item = cart.FirstOrDefault(one => one.ProductId = id);
+        CartItem? item = cart.Items.FirstOrDefault(one => one.ProductId == id);
         if (item is not null)
         {
             cart.Items.Remove(item);

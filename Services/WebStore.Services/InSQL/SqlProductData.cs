@@ -27,14 +27,14 @@ public class SqlProductData : IProductData
 
     public Product? GetProductById(int id)
         => _dbContext.Products
-            .Icnlude(el => el.Section)
+            .Include(el => el.Section)
             .Include(el => el.Brand)
             .FirstOrDefault(el => el.Id == id);
 
     public IEnumerable<Product> GetProducts(ProductFilter? filter = null)
     {
         IQueryable<Product> products = _dbContext.Products
-            .Icnlude(el => el.Section)
+            .Include(el => el.Section)
             .Include(el => el.Brand);
 
         if (filter?.Ids?.Length > 0)

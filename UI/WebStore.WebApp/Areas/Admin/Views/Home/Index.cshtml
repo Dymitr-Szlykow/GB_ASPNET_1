@@ -23,7 +23,7 @@
     int i;
     for (i = 0; i < divSquaresData.Items.Length; i++) {
 
-        if (i % 6 == 0) { <div class="row text-center pad-top"> }
+        if (i % 6 == 0) { @Html.Raw("<div class=\"row text-center pad-top\">"); }
 
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
             <div class="div-square">
@@ -34,9 +34,9 @@
             </div>
         </div>
 
-        if (i % 6 == 5) { </div><!-- /. ROW  --> }
+        if (i % 6 == 5) { @Html.Raw("</div><!-- /. ROW  -->"); }
     }
-    if (i % 6 != 0) { </div><!-- /. ROW  --> }
+    if (i % 6 != 0) { @Html.Raw("</div><!-- /. ROW  -->"); }
     // а вообще, плохой дизайн, следует использовать grid-container
 }
 
