@@ -1,0 +1,105 @@
+﻿@model OrderVM
+@inject ILogger<GB.ASPNET.WebStore.Controllers.CartController> _logger
+@{
+}
+<div class="row">
+	<form asp-action="CheckOut" asp-antiforgery="true">
+		<div class="col-sm-6">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+			<div class="form-group">
+				<label asp-for="Phone" class="sr-only">Телефон</label>
+				<input asp-for="Phone" class="form-control" placeholder="телефон" />
+				<span asp-validation-for="Phone" class="text-danger"></span>
+			</div>
+			
+			<div class="form-group">
+				<label asp-for="Address" class="sr-only">Адрес</label>
+				<input asp-for="Address" class="form-control" placeholder="адрес" />
+				<span asp-validation-for="Address" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="Description" class="sr-only">Комментарии к заказу</label>
+				<input asp-for="Description" class="form-control" />
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+
+			<div class="chose_area">
+
+				<ul class="user_option">
+					<li>
+						<input type="checkbox">
+						<label>Использовать промокод</label>
+					</li>
+					<li>
+						<input type="checkbox">
+						<label>Использовать сертификат</label>
+					</li>
+					<li>
+						<input type="checkbox">
+						<label>Рассчитать доставку и налоги</label>
+					</li>
+				</ul>
+
+				<ul class="user_info">
+					<li class="single_field">
+						<label>Страна:</label>
+						<select>
+							<option>США</option>
+							<option>Бангладеш</option>
+							<option>Англия</option>
+							<option>Индия</option>
+							<option>Пакистан</option>
+							<option>Россия</option>
+							<option>Канада</option>
+							<option>Дубаи</option>
+						</select>
+								
+					</li>
+					<li class="single_field">
+						<label>Область/штат:</label>
+						<select>
+							<option>Выберите</option>
+							<option>Дакка</option>
+							<option>Лондон</option>
+							<option>Диллих</option>
+							<option>Лахор</option>
+							<option>Аляска</option>
+							<option>Канада</option>
+							<option>Дубаи</option>
+						</select>
+							
+					</li>
+					<li class="single_field zip-field">
+						<label>Индакс:</label>
+						<input type="text">
+					</li>
+				</ul>
+
+				<a class="btn btn-default update" href="">Get Quotes</a>
+				<a class="btn btn-default check_out" href="">Продолжить</a>
+			</div>
+		</div>
+
+		<div class="col-sm-6">
+			@if (ViewData.TryGetValue("TotalPrice", out var totalPrice) && totalPrice is decimal cost)
+			{
+				<div class="total_area">
+					<ul>
+						<li>Подитог <span>@cost.ToString("C")</span></li>
+						<li>Эко-сбор <span>not implemented</span></li>
+						<li>Стоимость доставки <span>бесплатно</span></li>
+						<li>Итого <span>@cost.ToString("C")</span></li>
+					</ul>
+
+					<a class="btn btn-default update" href="">Обновить</a>
+					<input type="submit" value="Оформить заказ" class="btn btn-default check_out" />
+				</div>
+			}
+			else _logger.LogError(
+				"Формирование частичного представления Cart/Partial/_order: не удалось достать TotalPrice ({totalPrice}) как decimal. Model: {Model}. ViewBag: {ViewData}",
+				totalPrice, Model, ViewData);
+		</div>
+	</form>
+</div>

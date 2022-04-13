@@ -1,0 +1,33 @@
+﻿@using GB.ASPNET.WebStore.ViewModels @* из-зи глюков IntelliSense *@
+@model GB.ASPNET.WebStore.ViewModels.CartOrderVM
+@{
+	ViewBag.Title = "Ваша корзина";
+}
+<section id="cart_items">
+	<div class="container">
+
+		<div class="breadcrumbs">
+			<ol class="breadcrumb">
+				<li><a asp-controller="Home" asp-action="Index">Home</a></li>
+				<li class="active">Shopping Корзина</li>
+			</ol>
+		</div>
+		
+		<partial name="Partial/_cart" model="Model.Cart" />
+
+	</div>
+</section><!--/#cart_items-->
+
+<section id="do_action">
+	<div class="container">
+		@if (Model.Cart.TotalPrice > 0)
+		{
+			<div class="heading">
+				<h3>Что мы сделаем с этим дальше?</h3>
+				<p>Выберите, есть ли у вас код скидки или бонусные баллы, которые вы хотите использовать или хотите сделать скуидку на доставку.</p>
+			</div>
+
+			<partial name="Paartial/_order" model="Model.Order" viewdata="@(new ViewDataDictionary(ViewData) { {"TotalPrice", Model.Cart.TotalPrice} })" />
+		}
+	</div>
+</section><!--/#do_action-->
