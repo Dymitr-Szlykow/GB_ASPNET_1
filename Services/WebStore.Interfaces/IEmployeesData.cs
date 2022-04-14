@@ -1,6 +1,6 @@
 ﻿using GB.ASPNET.WebStore.Domain.Entities;
 
-namespace GB.ASPNET.WebStore.Services.Interfaces;
+namespace GB.ASPNET.WebStore.Interfaces;
 
 public interface IEmployeesData
 {

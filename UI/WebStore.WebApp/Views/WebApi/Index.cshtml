@@ -1,0 +1,26 @@
+﻿@model IEnumerable<string>
+@{
+    ViewBag.Title = "тестовый WebAPI";
+}
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                foreach (string element in Model)
+                {
+                    <tr>
+                        <td>@i++</td>
+                        <td>@element</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

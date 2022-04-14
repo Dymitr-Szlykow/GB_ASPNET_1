@@ -6,8 +6,9 @@ using GB.ASPNET.WebStore.DAL.Context;
 using GB.ASPNET.WebStore.Domain.Entities.Identity;
 using GB.ASPNET.WebStore.Infrastructure.Conventions;
 using GB.ASPNET.WebStore.Infrastructure.Middleware;
+using GB.ASPNET.WebStore.Interfaces;
 using GB.ASPNET.WebStore.Services;
-using GB.ASPNET.WebStore.Services.Interfaces;
+using GB.ASPNET.WebStore.WebAPI.Clients.Values;
 
 WebApplication
     .CreateBuilder(args)
@@ -33,11 +34,13 @@ public static class WebStoreBuildHelper
             "SqlServer" or "DockerDB"
                 => builder.Services.AddDbContext<WebStoreDB>(opt =>
                     opt.UseSqlServer(builder.Configuration.GetConnectionString(db))),
+
             "Sqlite"
                 => builder.Services.AddDbContext<WebStoreDB>(opt =>
                     opt.UseSqlite(
                         builder.Configuration.GetConnectionString(db),
                         arg => arg.MigrationsAssembly("WebStore.DAL.Sqlite"))),
+
             _ => throw new ApplicationException("Ошибка чтения строки подключения к БД.")
         };
 
@@ -48,6 +51,8 @@ public static class WebStoreBuildHelper
             .AddScoped<ICart, InCookiesCart>()
             .AddScoped<IOrderService, SqlOrderData>()
             .AddScoped<IVeiwAdminIndexData, AdminHomeIndexData>()
+
+            .AddHttpClient<IValuesAPI,ValuesClient>(client => client.BaseAddress = new(builder.Configuration["WebAPI"])).Services
 
             .AddAutoMapper(typeof(Program)) //.AddAutoMapper(Assembly.GetEntryAssembly());
             .AddIdentity<User, Role>(/*opt => { }*/)

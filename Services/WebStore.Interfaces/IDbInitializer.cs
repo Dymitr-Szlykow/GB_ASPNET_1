@@ -1,4 +1,4 @@
-﻿namespace GB.ASPNET.WebStore.Services.Interfaces;
+﻿namespace GB.ASPNET.WebStore.Interfaces;
 
 public interface IDbInitializer
 {

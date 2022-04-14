@@ -1,7 +1,8 @@
-﻿using GB.ASPNET.WebStore.DAL.Context;
+﻿using Microsoft.Extensions.Logging;
+using GB.ASPNET.WebStore.DAL.Context;
 using GB.ASPNET.WebStore.Domain;
 using GB.ASPNET.WebStore.Domain.Entities;
-using GB.ASPNET.WebStore.Services.Interfaces;
+using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.Services;
 

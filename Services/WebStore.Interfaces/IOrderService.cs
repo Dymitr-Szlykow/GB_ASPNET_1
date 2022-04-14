@@ -1,7 +1,7 @@
 ﻿using GB.ASPNET.WebStore.Domain.Entities.Orders;
 using GB.ASPNET.WebStore.ViewModels;
 
-namespace GB.ASPNET.WebStore.Services.Interfaces;
+namespace GB.ASPNET.WebStore.Interfaces;
 
 public interface IOrderService
 {

@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using GB.ASPNET.WebStore.Domain.Entities.Identity;
+﻿using Microsoft.AspNetCore.Mvc;
 using GB.ASPNET.WebStore.Domain.Entities.Orders;
 using GB.ASPNET.WebStore.Models;
-using GB.ASPNET.WebStore.Services.Interfaces;
+using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.Controllers;
 

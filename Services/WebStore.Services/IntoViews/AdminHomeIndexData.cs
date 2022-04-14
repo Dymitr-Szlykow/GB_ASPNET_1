@@ -1,4 +1,4 @@
-﻿using GB.ASPNET.WebStore.Services.Interfaces;
+﻿using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.Services;
 

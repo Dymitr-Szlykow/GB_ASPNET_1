@@ -1,13 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<RootNamespace>GB.ASPNET.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <RootNamespace>GB.ASPNET.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\WebStore.Domain\WebStore.Domain.csproj" />
     <ProjectReference Include="..\WebStore.Interfaces\WebStore.Interfaces.csproj" />
   </ItemGroup>
 

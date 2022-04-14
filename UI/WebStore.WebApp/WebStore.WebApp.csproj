@@ -7,6 +7,7 @@
     <UserSecretsId>0f68975f-e16e-4ff9-8e55-e2fc3c8f3741</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
+	<RootNamespace>GB.ASPNET.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ProjectReference Include="..\..\Data\WebStore.DAL.Sqlite\WebStore.DAL.Sqlite.csproj" />
     <ProjectReference Include="..\..\Data\WebStore.DAL\WebStore.DAL.csproj" />
     <ProjectReference Include="..\..\Services\WebStore.Services\WebStore.Services.csproj" />
+    <ProjectReference Include="..\..\Services\WebStore.WebAPI.Clients\WebStore.WebAPI.Clients.csproj" />
   </ItemGroup>
 
   <ItemGroup>

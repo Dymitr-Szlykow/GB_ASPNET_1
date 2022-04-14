@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using GB.ASPNET.WebStore.Domain;
 using GB.ASPNET.WebStore.Domain.Entities;
 using GB.ASPNET.WebStore.Models;
 using GB.ASPNET.WebStore.ViewModels;
-using GB.ASPNET.WebStore.Services.Interfaces;
+using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.Services;
 

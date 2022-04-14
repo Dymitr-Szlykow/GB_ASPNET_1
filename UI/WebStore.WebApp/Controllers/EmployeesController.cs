@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using GB.ASPNET.WebStore.Domain.Entities;
 using GB.ASPNET.WebStore.Domain.Entities.Identity;
+using GB.ASPNET.WebStore.Interfaces;
 using GB.ASPNET.WebStore.Models;
 using GB.ASPNET.WebStore.ViewModels;
-using GB.ASPNET.WebStore.Services;
-using GB.ASPNET.WebStore.Services.Interfaces;
 
 namespace GB.ASPNET.WebStore.Controllers;
 

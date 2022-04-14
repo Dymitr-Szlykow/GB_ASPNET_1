@@ -4,7 +4,7 @@ using GB.ASPNET.WebStore.Domain.Entities.Orders;
 using GB.ASPNET.WebStore.Models;
 using GB.ASPNET.WebStore.ViewModels;
 using GB.ASPNET.WebStore.Services;
-using GB.ASPNET.WebStore.Services.Interfaces;
+using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.Controllers;
 

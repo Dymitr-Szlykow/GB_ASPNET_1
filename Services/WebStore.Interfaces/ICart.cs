@@ -1,6 +1,6 @@
 ﻿using GB.ASPNET.WebStore.ViewModels;
 
-namespace GB.ASPNET.WebStore.Services.Interfaces;
+namespace GB.ASPNET.WebStore.Interfaces;
 
 public interface ICart
 {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 using GB.ASPNET.WebStore.Data;
 using GB.ASPNET.WebStore.DAL.Context;
 using GB.ASPNET.WebStore.Domain.Entities.Identity;
-using GB.ASPNET.WebStore.Services.Interfaces;
+using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.Services;
 
