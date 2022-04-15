@@ -23,28 +23,24 @@ public class EmployeesController : Controller
 
     public IActionResult Index()
     {
-        var listViewmodel = new List<EmployeeVM>();
-        foreach (Employee employee in _employeesData.GetAll())
-            listViewmodel.Add(employee.ToViewmodel()!);
-
+        List<EmployeeVM?>? listViewmodel = _employeesData.GetAll().Select(el => el.ToViewmodel()).ToList();
         return View("List", listViewmodel);
     }
 
+
     public IActionResult List()
     {
-        var listViewmodel = new List<EmployeeVM>();
-        foreach (Employee employee in _employeesData.GetAll())
-            listViewmodel.Add(employee.ToViewmodel()!);
-
-        return View(listViewmodel);
+        return View(_employeesData.GetAll().Select(el => el.ToViewmodel()).ToList());
     }
+
 
     public IActionResult Details(int id)
     {
         Employee? model = _employeesData.GetById(id);
-        if (model == null) return NotFound();
+        if (model is null) return NotFound();
         else return View(model.ToViewmodel());
     }
+
 
     [Authorize(Roles = Role.administrators)]
     public IActionResult Create()
@@ -52,15 +48,17 @@ public class EmployeesController : Controller
         return View("Update", new EmployeeVM());
     }
 
-    [Authorize(Roles = Role.administrators)]
-    public IActionResult Update(int? sentId)
-    {
-        if (sentId is null) return View(new EmployeeVM());
 
-        Employee? emp = _employeesData.GetById((int)sentId);
+    [Authorize(Roles = Role.administrators)]
+    public IActionResult Update(int? requestId)
+    {
+        if (requestId is null) return View(new EmployeeVM());
+
+        Employee? emp = _employeesData.GetById((int)requestId);
         if (emp is null) return NotFound();
         else return View(emp.ToViewmodel());
     }
+
 
     [HttpPost]
     [Authorize(Roles = Role.administrators)]
@@ -73,19 +71,16 @@ public class EmployeesController : Controller
         Employee employee = viewmodel?.ToEntityModel()!;
         if (employee.Id == 0)
         {
-            int? newId = _employeesData.Add(employee);
+            _ = _employeesData.Add(employee);
             return RedirectToAction(nameof(List), _employeesData);
-            //return RedirectToAction(nameof(Details), newId);
-            //return RedirectToRoute($"~/EmployeeInfo({newId})");
-            //return RedirectToRoute($"~/Employees/Details/{newId}");
         }
         else
         {
-            _employeesData.Edit(employee);
+            _ = _employeesData.Edit(employee);
             return RedirectToAction(nameof(List), _employeesData);
-                //View("List", _employeesData.GetAll());
         }
     }
+
 
     [Authorize(Roles = Role.administrators)]
     public IActionResult Delete(int id)
@@ -95,6 +90,7 @@ public class EmployeesController : Controller
         if (emp is null) return NotFound();
         else return View(emp.ToViewmodel());
     }
+
 
     [HttpPost]
     [Authorize(Roles = Role.administrators)]

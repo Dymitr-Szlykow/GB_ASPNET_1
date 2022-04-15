@@ -16,7 +16,7 @@ WebApplication
     .SetMyServices()
     .Build()
 
-    .SetUpMyDB().GetAwaiter().GetResult()
+    .SetUpMyDB().Result //.GetAwaiter().GetResult()
     .SetMyMiddlewarePipeline()
     .MapMyRoutes()
     .Run();
@@ -91,7 +91,7 @@ public static class WebStoreBuildHelper
                 {
                     opt.Cookie.Name = "GBWebStore";
                     opt.Cookie.HttpOnly = true;
-                    opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+                    opt.ExpireTimeSpan = TimeSpan.FromDays(7);
                     opt.LoginPath = "/Account/Login";
                     opt.LogoutPath = "/Account/Logout";
                     opt.AccessDeniedPath = "/Account/AccessDenied";
@@ -100,6 +100,7 @@ public static class WebStoreBuildHelper
 
         return builder;
     }
+
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<WebApplication> SetUpMyDB(this WebApplication app)
@@ -112,6 +113,7 @@ public static class WebStoreBuildHelper
         }
         return app;
     }
+
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplication SetMyMiddlewarePipeline(this WebApplication app)
@@ -130,6 +132,7 @@ public static class WebStoreBuildHelper
 
         return app;
     }
+
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplication MapMyRoutes(this WebApplication app)
