@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GB.ASPNET.WebStore.Interfaces;
-using GB.ASPNET.WebStore.WebAPI.Clients.Values;
 
 namespace GB.ASPNET.WebStore.WebApp.Controllers;
 

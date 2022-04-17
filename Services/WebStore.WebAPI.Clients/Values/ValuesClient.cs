@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using GB.ASPNET.WebStore.Interfaces;
 
-namespace GB.ASPNET.WebStore.WebAPI.Clients.Values;
+namespace GB.ASPNET.WebStore.WebAPI.Clients;
 
 public class ValuesClient : BaseClient, IValuesAPI
 {
@@ -9,7 +9,7 @@ public class ValuesClient : BaseClient, IValuesAPI
 
     public int Count()
     {
-        HttpResponseMessage? response = _HttpClient.GetAsync($"{_Address}/count").Result;
+        HttpResponseMessage? response = HttpClient.GetAsync($"{ControllerRoute}/count").Result;
         if (response.IsSuccessStatusCode)
             return response.Content.ReadFromJsonAsync<int>().Result!;
         else return -1;
@@ -17,19 +17,19 @@ public class ValuesClient : BaseClient, IValuesAPI
 
     public void Create(string newValue)
     {
-        HttpResponseMessage? response = _HttpClient.PostAsJsonAsync(_Address, newValue).Result;
+        HttpResponseMessage? response = HttpClient.PostAsJsonAsync(ControllerRoute, newValue).Result;
         response.EnsureSuccessStatusCode();
     }
 
     public bool Delete(int id)
     {
-        HttpResponseMessage? response = _HttpClient.DeleteAsync($"{_Address}/{id}").Result;
+        HttpResponseMessage? response = HttpClient.DeleteAsync($"{ControllerRoute}/{id}").Result;
         return response.IsSuccessStatusCode;
     }
 
     public IEnumerable<string> GetAll()
     {
-        HttpResponseMessage? response = _HttpClient.GetAsync(_Address).Result;
+        HttpResponseMessage? response = HttpClient.GetAsync(ControllerRoute).Result;
         if (response.IsSuccessStatusCode)
             return response.Content.ReadFromJsonAsync<IEnumerable<string>>().Result!;
         else return Enumerable.Empty<string>();
@@ -37,7 +37,7 @@ public class ValuesClient : BaseClient, IValuesAPI
 
     public string? GetById(int id)
     {
-        HttpResponseMessage? response = _HttpClient.GetAsync($"{_Address}/{id}").Result;
+        HttpResponseMessage? response = HttpClient.GetAsync($"{ControllerRoute}/{id}").Result;
         if (response.IsSuccessStatusCode)
             return response.Content.ReadFromJsonAsync<string>().Result!;
         else return null;
@@ -45,7 +45,7 @@ public class ValuesClient : BaseClient, IValuesAPI
 
     public void Update(int id, string newValue)
     {
-        HttpResponseMessage? response = _HttpClient.PutAsJsonAsync($"{_Address}/{id}", newValue).Result;
+        HttpResponseMessage? response = HttpClient.PutAsJsonAsync($"{ControllerRoute}/{id}", newValue).Result;
         response?.EnsureSuccessStatusCode();
     }
 }

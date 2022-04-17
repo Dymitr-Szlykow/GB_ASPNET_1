@@ -37,8 +37,7 @@ public class EmployeesController : Controller
     public IActionResult Details(int id)
     {
         Employee? model = _employeesData.GetById(id);
-        if (model is null) return NotFound();
-        else return View(model.ToViewmodel());
+        return model is null ? NotFound() : View(model.ToViewmodel());
     }
 
 
