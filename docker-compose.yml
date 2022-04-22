@@ -5,8 +5,19 @@ services:
     container_name: MSSQL
     image: "mcr.microsoft.com/mssql/server:2019-latest"
 
-  gb.aspnet.webstore:
-    image: ${DOCKER_REGISTRY-}gbaspnetwebstore
+  api:
+    image: ${DOCKER_REGISTRY-}webstore-api
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Services/Webstore.WebAPI/Dockerfile
+
+  webstore:
+    image: ${DOCKER_REGISTRY-}webstore
+    depends_on:
+      - db
+      - api
     build:
       context: .
       dockerfile: UI/WebStore.WebApp/Dockerfile

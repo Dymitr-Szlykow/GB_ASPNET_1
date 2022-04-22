@@ -36,13 +36,18 @@ public class OrdersClient : BaseClient, IOrderService
             .Content.ReadFromJsonAsync<OrderDTO>(cancellationToken: token)
             .ConfigureAwait(continueOnCapturedContext: false);
 
-        User? user = await _userManager.FindByNameAsync(result!.UserName);
+        User? user = await _userManager.FindByNameAsync(userName);
         if (user is null)
         {
-            _logger.LogError("Не удалось найти пользователя по имени \"{UserName}\" (из DTO: {result}).", result.UserName, result);
-            throw new InvalidDataException($"Не удалось найти пользователя по имени {result.UserName}.");
+            _logger.LogError("Не удалось найти пользователя по имени \"{UserName}\" (из DTO: {result}).", userName, result);
+            throw new ArgumentException($"Не удалось найти пользователя по имени {userName}.");
         }
-        else return result.ToEntityModel(user)!;
+        else
+        {
+            if (result!.UserName != userName)
+                _logger.LogWarning("Несоответствие имени пользователя \"{userName}\" (аргумент) и полученного заказа: {result}.", userName, result);
+            return result.ToEntityModel(user)!;
+        }
     }
 
     public async Task<Order?> GetOrderByIdAsync(int id, CancellationToken token = default)

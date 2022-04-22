@@ -47,11 +47,11 @@ public static class WebStoreBuildHelper
         _ = builder.Services
             .AddTransient<IDbInitializer, DbInitializer>()
             .AddScoped<ICart, InCookiesCart>()
-            .AddScoped<IOrderService, SqlOrderData>()
             .AddScoped<IVeiwAdminIndexData, AdminHomeIndexData>()
             .AddHttpClient<IValuesAPI, ValuesClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
             .AddHttpClient<IEmployeesData, EmployeesClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
             .AddHttpClient<IProductData, ProductsClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
+            .AddHttpClient<IOrderService, OrdersClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
 
             .AddAutoMapper(typeof(Program)) //.AddAutoMapper(Assembly.GetEntryAssembly());
             .AddIdentity<User, Role>(/*opt => { }*/)
