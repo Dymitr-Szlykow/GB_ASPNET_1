@@ -16,6 +16,7 @@ public class Employee : Entity
 
     [Required]
     public string NameLast { get; set; } = null!;
+
     public string? NamePaternal { get; set; }
 
     [NotMapped]
@@ -41,7 +42,9 @@ public class Employee : Entity
         set
         {
             if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value), value, "Значение возраста должно быть положительным.");
-            age = value;
+            else age = value;
         }
     }
+
+    public override string ToString() => $"({Id}) {NameShort}";
 }

@@ -30,9 +30,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Services", "Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.WebApp", "UI\WebStore.WebApp\WebStore.WebApp.csproj", "{FE9A0D52-2DBB-45CD-A5F2-3B28B9C12D74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.WebAPI", "Services\WebStore.WebAPI\WebStore.WebAPI.csproj", "{D2743B45-B819-42D1-9575-DC6A0A9A8CF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.WebAPI", "Services\WebStore.WebAPI\WebStore.WebAPI.csproj", "{D2743B45-B819-42D1-9575-DC6A0A9A8CF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.WebAPI.Clients", "Services\WebStore.WebAPI.Clients\WebStore.WebAPI.Clients.csproj", "{67BDB4C8-97A5-4D44-B276-CA126F98F4F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.WebAPI.Clients", "Services\WebStore.WebAPI.Clients\WebStore.WebAPI.Clients.csproj", "{67BDB4C8-97A5-4D44-B276-CA126F98F4F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.ConsoleUI", "UI\WebStore.ConsoleUI\WebStore.ConsoleUI.csproj", "{E395A098-BE1A-4F6C-AE5A-F9A0397A434E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +78,10 @@ Global
 		{67BDB4C8-97A5-4D44-B276-CA126F98F4F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67BDB4C8-97A5-4D44-B276-CA126F98F4F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67BDB4C8-97A5-4D44-B276-CA126F98F4F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E395A098-BE1A-4F6C-AE5A-F9A0397A434E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E395A098-BE1A-4F6C-AE5A-F9A0397A434E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E395A098-BE1A-4F6C-AE5A-F9A0397A434E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E395A098-BE1A-4F6C-AE5A-F9A0397A434E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{FE9A0D52-2DBB-45CD-A5F2-3B28B9C12D74} = {5FA76252-3472-4126-A97E-281C207A9C82}
 		{D2743B45-B819-42D1-9575-DC6A0A9A8CF5} = {890CAE69-E2BF-4909-BC93-6215D8E383D9}
 		{67BDB4C8-97A5-4D44-B276-CA126F98F4F8} = {890CAE69-E2BF-4909-BC93-6215D8E383D9}
+		{E395A098-BE1A-4F6C-AE5A-F9A0397A434E} = {5FA76252-3472-4126-A97E-281C207A9C82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7806875-7C04-4969-9840-9F9132B41675}

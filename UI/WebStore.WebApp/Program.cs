@@ -8,7 +8,7 @@ using GB.ASPNET.WebStore.Infrastructure.Conventions;
 using GB.ASPNET.WebStore.Infrastructure.Middleware;
 using GB.ASPNET.WebStore.Interfaces;
 using GB.ASPNET.WebStore.Services;
-using GB.ASPNET.WebStore.WebAPI.Clients.Values;
+using GB.ASPNET.WebStore.WebAPI.Clients;
 
 WebApplication
     .CreateBuilder(args)
@@ -16,7 +16,7 @@ WebApplication
     .SetMyServices()
     .Build()
 
-    .SetUpMyDB().GetAwaiter().GetResult()
+    .SetUpMyDB().Result //.GetAwaiter().GetResult()
     .SetMyMiddlewarePipeline()
     .MapMyRoutes()
     .Run();
@@ -46,13 +46,12 @@ public static class WebStoreBuildHelper
 
         _ = builder.Services
             .AddTransient<IDbInitializer, DbInitializer>()
-            .AddScoped<IEmployeesData, InMemoryEmployeesData>()
-            .AddScoped<IProductData, SqlProductData>()
             .AddScoped<ICart, InCookiesCart>()
-            .AddScoped<IOrderService, SqlOrderData>()
             .AddScoped<IVeiwAdminIndexData, AdminHomeIndexData>()
-
-            .AddHttpClient<IValuesAPI,ValuesClient>(client => client.BaseAddress = new(builder.Configuration["WebAPI"])).Services
+            .AddHttpClient<IValuesAPI, ValuesClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
+            .AddHttpClient<IEmployeesData, EmployeesClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
+            .AddHttpClient<IProductData, ProductsClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
+            .AddHttpClient<IOrderService, OrdersClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
 
             .AddAutoMapper(typeof(Program)) //.AddAutoMapper(Assembly.GetEntryAssembly());
             .AddIdentity<User, Role>(/*opt => { }*/)
@@ -78,10 +77,8 @@ public static class WebStoreBuildHelper
                     opt.Password.RequiredLength = 3;
                     opt.Password.RequiredUniqueChars = 3;
 #endif
-
                     opt.User.RequireUniqueEmail = false;
                     opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwqyxABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
                     opt.Lockout.AllowedForNewUsers = false;
                     opt.Lockout.MaxFailedAccessAttempts = 10;
                     opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
@@ -91,7 +88,7 @@ public static class WebStoreBuildHelper
                 {
                     opt.Cookie.Name = "GBWebStore";
                     opt.Cookie.HttpOnly = true;
-                    opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+                    opt.ExpireTimeSpan = TimeSpan.FromDays(7);
                     opt.LoginPath = "/Account/Login";
                     opt.LogoutPath = "/Account/Logout";
                     opt.AccessDeniedPath = "/Account/AccessDenied";
@@ -100,6 +97,7 @@ public static class WebStoreBuildHelper
 
         return builder;
     }
+
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<WebApplication> SetUpMyDB(this WebApplication app)
@@ -112,6 +110,7 @@ public static class WebStoreBuildHelper
         }
         return app;
     }
+
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplication SetMyMiddlewarePipeline(this WebApplication app)
@@ -130,6 +129,7 @@ public static class WebStoreBuildHelper
 
         return app;
     }
+
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplication MapMyRoutes(this WebApplication app)
