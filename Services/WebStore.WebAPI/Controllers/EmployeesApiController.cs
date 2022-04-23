@@ -5,7 +5,7 @@ using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.WebAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route(WebApiRoutes.V1.EmployeesRoute)]
 [ApiController]
 public class EmployeesApiController : ControllerBase
 {

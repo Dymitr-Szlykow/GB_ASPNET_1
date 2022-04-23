@@ -7,7 +7,7 @@ using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.WebAPI.Controllers;
 
-[Route("api/catalog")]
+[Route(WebApiRoutes.V1.CatalogRoute)]
 [ApiController]
 public class ProductsApiController : ControllerBase
 {

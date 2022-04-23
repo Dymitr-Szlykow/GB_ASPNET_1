@@ -15,7 +15,7 @@ public class OrdersClient : BaseClient, IOrderService
     private readonly UserManager<User> _userManager;
     private readonly ILogger<OrdersClient> _logger;
 
-    public OrdersClient(HttpClient httpClient, UserManager<User> userManager, ILogger<OrdersClient> logger) : base(httpClient, "api/orders")
+    public OrdersClient(HttpClient httpClient, UserManager<User> userManager, ILogger<OrdersClient> logger) : base(httpClient, WebApiRoutes.V1.OrdersRoute)
     {
         _userManager = userManager;
         _logger = logger;
