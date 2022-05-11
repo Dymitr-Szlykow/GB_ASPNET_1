@@ -16,7 +16,7 @@ WebApplication
     .SetMyServices()
     .Build()
 
-    .SetUpMyDB().Result //.GetAwaiter().GetResult()
+    //.SetUpMyDB().Result //.GetAwaiter().GetResult()
     .SetMyMiddlewarePipeline()
     .MapMyRoutes()
     .Run();
@@ -27,73 +27,70 @@ public static class WebStoreBuildHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static WebApplicationBuilder SetMyServices(this WebApplicationBuilder builder)
     {
-        string? db = builder.Configuration["Database"];
-
-        _ = db switch
-        {
-            "SqlServer" or "DockerDB"
-                => builder.Services.AddDbContext<WebStoreDB>(opt =>
-                    opt.UseSqlServer(builder.Configuration.GetConnectionString(db))),
-
-            "Sqlite"
-                => builder.Services.AddDbContext<WebStoreDB>(opt =>
-                    opt.UseSqlite(
-                        builder.Configuration.GetConnectionString(db),
-                        arg => arg.MigrationsAssembly("WebStore.DAL.Sqlite"))),
-
-            _ => throw new ApplicationException("Ошибка чтения строки подключения к БД.")
-        };
-
         _ = builder.Services
-            .AddTransient<IDbInitializer, DbInitializer>()
             .AddScoped<ICart, InCookiesCart>()
             .AddScoped<IVeiwAdminIndexData, AdminHomeIndexData>()
-            .AddHttpClient<IValuesAPI, ValuesClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
-            .AddHttpClient<IEmployeesData, EmployeesClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
-            .AddHttpClient<IProductData, ProductsClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
-            .AddHttpClient<IOrderService, OrdersClient>(http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"])).Services
+
+            .AddHttpClient("WebStoreApi", http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"]))
+                .AddTypedClient<IValuesAPI, ValuesClient>()
+                .AddTypedClient<IEmployeesData, EmployeesClient>()
+                .AddTypedClient<IProductData, ProductsClient>()
+                .AddTypedClient<IOrderService, OrdersClient>()
+                .Services
 
             .AddAutoMapper(typeof(Program)) //.AddAutoMapper(Assembly.GetEntryAssembly());
+
             .AddIdentity<User, Role>(/*opt => { }*/)
                 .AddEntityFrameworkStores<WebStoreDB>()
                 .AddDefaultTokenProviders()
                 .Services
-            .AddControllersWithViews(
-                opt =>
-                {
-                    //opt.Conventions.Add(new DeletemeConvention());
-                    opt.Conventions.Add(new SetAreaControllersRoute());
-                });
+            .AddHttpClient("WebStoreApiIdentity", http => http.BaseAddress = new Uri(builder.Configuration["WebAPI"]))
+                .AddTypedClient<IUserStore<User>, UsersClient>()
+                .AddTypedClient<IUserRoleStore<User>, UsersClient>()
+                .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
+                .AddTypedClient<IUserEmailStore<User>, UsersClient>()
+                .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
+                .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
+                .AddTypedClient<IUserLoginStore<User>, UsersClient>()
+                .AddTypedClient<IUserClaimStore<User>, UsersClient>()
+                .AddTypedClient<IRoleStore<Role>, RolesClient>()
+                .Services
+
+            .AddControllersWithViews(opt =>
+            {
+                //opt.Conventions.Add(new DeletemeConvention());
+                opt.Conventions.Add(new SetAreaControllersRoute());
+            });
 
         _ = builder.Services
-            .Configure<IdentityOptions>(
-                opt =>
-                {
+
+            .Configure<IdentityOptions>(opt =>
+            {
 #if DEBUG
-                    opt.Password.RequireDigit = false;
-                    opt.Password.RequireLowercase = false;
-                    opt.Password.RequireUppercase = false;
-                    opt.Password.RequireNonAlphanumeric = false;
-                    opt.Password.RequiredLength = 3;
-                    opt.Password.RequiredUniqueChars = 3;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequiredUniqueChars = 3;
 #endif
-                    opt.User.RequireUniqueEmail = false;
-                    opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwqyxABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-                    opt.Lockout.AllowedForNewUsers = false;
-                    opt.Lockout.MaxFailedAccessAttempts = 10;
-                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-                })
-            .ConfigureApplicationCookie(
-                opt =>
-                {
-                    opt.Cookie.Name = "GBWebStore";
-                    opt.Cookie.HttpOnly = true;
-                    opt.ExpireTimeSpan = TimeSpan.FromDays(7);
-                    opt.LoginPath = "/Account/Login";
-                    opt.LogoutPath = "/Account/Logout";
-                    opt.AccessDeniedPath = "/Account/AccessDenied";
-                    opt.SlidingExpiration = true;
-                });
+                opt.User.RequireUniqueEmail = false;
+                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwqyxABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                opt.Lockout.AllowedForNewUsers = false;
+                opt.Lockout.MaxFailedAccessAttempts = 10;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            })
+
+            .ConfigureApplicationCookie(opt =>
+            {
+                opt.Cookie.Name = "GBWebStore";
+                opt.Cookie.HttpOnly = true;
+                opt.ExpireTimeSpan = TimeSpan.FromDays(7);
+                opt.LoginPath = "/Account/Login";
+                opt.LogoutPath = "/Account/Logout";
+                opt.AccessDeniedPath = "/Account/AccessDenied";
+                opt.SlidingExpiration = true;
+            });
 
         return builder;
     }

@@ -4,7 +4,7 @@ using GB.ASPNET.WebStore.Domain.Entities.Identity;
 namespace GB.ASPNET.WebStore.Interfaces;
 
 public interface IUsersClient :
-    IUserStore<User>,
+    IUserRoleStore<User>,
     IUserPasswordStore<User>,
     IUserEmailStore<User>,
     IUserPhoneNumberStore<User>,
@@ -12,3 +12,12 @@ public interface IUsersClient :
     IUserLoginStore<User>,
     IUserClaimStore<User>
 { }
+
+
+public interface IUserClaimStore : IUserClaimStore<User> { }
+public interface IUserEmailStore : IUserEmailStore<User> { }
+public interface IUserLoginStore : IUserLoginStore<User> { }
+public interface IUserPasswordStore : IUserPasswordStore<User> { }
+public interface IUserPhoneNumberStore : IUserPhoneNumberStore<User> { }
+public interface IUserRoleStore : IUserRoleStore<User> { }
+public interface IUserTwoFactorStore : IUserTwoFactorStore<User> { }

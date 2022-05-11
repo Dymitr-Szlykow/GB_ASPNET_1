@@ -31,17 +31,17 @@ public class UsersApiController : ControllerBase
 
     #region Users
 
-    [HttpPost("UserId")]                                // POST /api/v1/users/UserId HTTP/1.1
+    [HttpPost("fromthis/id")]                           // POST /api/v1/users/fromthis/id HTTP/1.1
     public async Task<string> GetUserIdAsync([FromBody] User user)
         => await _userStore.GetUserIdAsync(user);
 
 
-    [HttpPost("UserName")]                              // POST /api/v1/users/UserName HTTP/1.1
+    [HttpPost("fromthis/name")]                         // POST /api/v1/users/fromthis/name HTTP/1.1
     public async Task<string> GetUserNameAsync([FromBody] User user)
         => await _userStore.GetUserNameAsync(user);
 
 
-    [HttpPost("UserName/{name}")]                       // POST /api/v1/users/UserName/mrjohndoetheawesome HTTP/1.1
+    [HttpPost("tothis/name/{name}")]                    // POST /api/v1/users/tothis/name/mrjohndoetheawesome HTTP/1.1
     public async Task<string> SetUserNameAsync([FromBody] User user, string name)
     {
         await _userStore.SetUserNameAsync(user, name);
@@ -50,12 +50,12 @@ public class UsersApiController : ControllerBase
     }
 
 
-    [HttpPost("NormalUserName")]                        // POST /api/v1/users/NormalUserName HTTP/1.1
+    [HttpPost("fromthis/normalizedname")]               // POST /api/v1/users/fromthis/normalizedname HTTP/1.1
     public async Task<string> GetNormalizedUserNameAsync([FromBody] User user)
         => await _userStore.GetNormalizedUserNameAsync(user);
 
 
-    [HttpPost("NormalUserName/{name}")]                 // POST /api/v1/users/mrjohndoetheawesome HTTP/1.1
+    [HttpPost("tothis/normalizedname/{name}")]          // POST /api/v1/users/tothis/normalizedname/mrjohndoetheawesome HTTP/1.1
     public async Task<string> SetNormalizedUserNameAsync([FromBody] User user, string name)
     {
         await _userStore.SetNormalizedUserNameAsync(user, name);
@@ -64,36 +64,37 @@ public class UsersApiController : ControllerBase
     }
 
 
-    [HttpPost("user")]                                  // POST /api/v1/users/user HTTP/1.1
+    [HttpPost("new")]                                   // POST /api/v1/users/new HTTP/1.1
     public async Task<bool> CreateAsync([FromBody] User user)
     {
         IdentityResult? report = await _userStore.CreateAsync(user);
 
         if (!report.Succeeded)
         {
-            _logger.LogWarning("Создание пользователя {0}: ошибка(и). [{1}]",
+            _logger.LogWarning("Создание пользователя {user}: ошибка(и). [{errorMessages}]",
                 user, string.Join("], [", report.Errors.Select(exc => exc.Description)));
         }
         return report.Succeeded;
     }
 
 
-    [HttpPut("user")]                                   // PUT /api/v1/users/user HTTP/1.1
+    [HttpPut("update")]                                 // PUT /api/v1/users/update HTTP/1.1
+    [HttpPut("edit")]                                   // PUT /api/v1/users/edit HTTP/1.1
     public async Task<bool> UpdateAsync([FromBody] User user)
     {
         IdentityResult? report = await _userStore.UpdateAsync(user);
 
         if (!report.Succeeded)
         {
-            _logger.LogWarning("Редактирование пользователя {0}: ошибка(и). [{1}]",
+            _logger.LogWarning("Редактирование пользователя {user}: ошибка(и). [{errorMessages}]",
                 user, string.Join("], [", report.Errors.Select(exc => exc.Description)));
         }
         return report.Succeeded;
     }
 
 
-    [HttpPost("user/delete")]                           // POST /api/v1/users/user/delete HTTP/1.1
-    [HttpDelete("user/delete")]                         // DELETE /api/v1/users/user/delete HTTP/1.1
+    [HttpPost("this/delete")]                           // POST /api/v1/users/this/delete HTTP/1.1
+    [HttpDelete("this")]                                // DELETE /api/v1/users/this HTTP/1.1
     [HttpDelete]                                        // DELETE /api/v1/users HTTP/1.1
     public async Task<bool> DeleteAsync([FromBody] User user)
     {
@@ -101,7 +102,7 @@ public class UsersApiController : ControllerBase
 
         if (!report.Succeeded)
         {
-            _logger.LogWarning("РУдаление пользователя {0}: ошибка(и). [{1}]",
+            _logger.LogWarning("Удаление пользователя {user}: ошибка(и). [{errorMessages}]",
                 user, string.Join("], [", report.Errors.Select(exc => exc.Description)));
         }
         return report.Succeeded;
@@ -358,7 +359,7 @@ public class UsersApiController : ControllerBase
     [HttpPost("IncrementAccessFailedCount")]                        // POST /api/v1/users/incrementaccessfailedcount HTTP/1.1
     public async Task<int> IncrementAccessFailedCountAsync([FromBody] User user)
     {
-        var count = await _userStore.IncrementAccessFailedCountAsync(user);
+        int count = await _userStore.IncrementAccessFailedCountAsync(user);
         await _userStore.UpdateAsync(user);
         return count;
     }

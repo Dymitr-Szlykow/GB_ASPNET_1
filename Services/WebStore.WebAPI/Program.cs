@@ -32,31 +32,41 @@ builder.Services
     .AddScoped<IProductData, SqlProductData>()
     .AddScoped<IOrderService, SqlOrderData>()
     .AddScoped<IVeiwAdminIndexData, AdminHomeIndexData>()
+
     .AddControllers().Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
     .AddIdentity<User, Role>(/*opt => { }*/)
         .AddEntityFrameworkStores<WebStoreDB>()
         .AddDefaultTokenProviders()
-        .Services.Configure<IdentityOptions>(opt =>
-        {
+        .Services
+        
+    .Configure<IdentityOptions>(opt =>
+    {
 #if DEBUG
-            opt.Password.RequireDigit = false;
-            opt.Password.RequireLowercase = false;
-            opt.Password.RequireUppercase = false;
-            opt.Password.RequireNonAlphanumeric = false;
-            opt.Password.RequiredLength = 3;
-            opt.Password.RequiredUniqueChars = 3;
+        opt.Password.RequireDigit = false;
+        opt.Password.RequireLowercase = false;
+        opt.Password.RequireUppercase = false;
+        opt.Password.RequireNonAlphanumeric = false;
+        opt.Password.RequiredLength = 3;
+        opt.Password.RequiredUniqueChars = 3;
 #endif
-            opt.User.RequireUniqueEmail = false;
-            opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwqyxABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-            opt.Lockout.AllowedForNewUsers = false;
-            opt.Lockout.MaxFailedAccessAttempts = 10;
-            opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-        });
+        opt.User.RequireUniqueEmail = false;
+        opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwqyxABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        opt.Lockout.AllowedForNewUsers = false;
+        opt.Lockout.MaxFailedAccessAttempts = 10;
+        opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    });
 
 
 WebApplication app = builder.Build();
+
+using (IServiceScope? scope = app.Services.CreateScope())
+{
+    await scope.ServiceProvider
+        .GetRequiredService<IDbInitializer>()
+        .InitializeAsync(removeBefore: true);
+}
 
 if (app.Environment.IsDevelopment())
 {
