@@ -5,7 +5,7 @@ namespace GB.ASPNET.WebStore.WebAPI.Clients;
 
 public class ValuesClient : BaseClient, IValuesAPI
 {
-    public ValuesClient(HttpClient httpClient) : base(httpClient, "api/values") { }
+    public ValuesClient(HttpClient httpClient) : base(httpClient, WebApiRoutes.V1.ValuesRoute) { }
 
     public int Count()
     {

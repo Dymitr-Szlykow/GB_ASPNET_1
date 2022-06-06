@@ -5,7 +5,6 @@ using GB.ASPNET.WebStore.ViewModels;
 
 namespace GB.ASPNET.WebStore.Controllers
 {
-    //[Controller]
     public class HomeController : Controller
     {
 

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GB.ASPNET.WebStore.Interfaces;
 
 namespace GB.ASPNET.WebStore.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route(WebApiRoutes.V1.ValuesRoute)]
     [ApiController]
     public class ValuesController : ControllerBase
     {

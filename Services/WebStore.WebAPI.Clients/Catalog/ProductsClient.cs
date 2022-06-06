@@ -10,7 +10,7 @@ namespace GB.ASPNET.WebStore.WebAPI.Clients;
 
 public class ProductsClient : BaseClient, IProductData
 {
-    public ProductsClient(HttpClient httpClient) : base(httpClient, "api/catalog") { }
+    public ProductsClient(HttpClient httpClient) : base(httpClient, WebApiRoutes.V1.CatalogRoute) { }
 
 
     public Brand? GetBrandById(int id)

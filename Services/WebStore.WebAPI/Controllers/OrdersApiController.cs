@@ -7,7 +7,7 @@ using GB.ASPNET.WebStore.Models;
 
 namespace GB.ASPNET.WebStore.WebAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route(WebApiRoutes.V1.OrdersRoute)]
 [ApiController]
 public class OrdersApiController : ControllerBase
 {
